@@ -4,14 +4,13 @@ The data comes from the City of Seattle Staff Demographics dataset (2026), which
 
 **Visualization**
 
-<img width="1148" height="309" alt="Comparing Hourly Wages Across Gender and Race in Seattle" src="https://github.com/user-attachments/assets/474d60b8-749c-4015-bce2-77a5aa519576" /><br>
+<img width="1148" height="309" alt="Comparing Hourly Wages Across Gender and Race in Seattle" src="https://github.com/user-attachments/assets/474d60b8-749c-4015-bce2-77a5aa519576" /><br><br>
 
 **Published Visualization**
-[View my visualization](https://public.flourish.studio/visualisation/28548056/)
-
-Data Source & Citations
-[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Staff-Demographics/5avq-r9hj/about_data)
-
+[View my visualization](https://public.flourish.studio/visualisation/28548056/)<br><br>
+Data Source<br>
+[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Staff-Demographics/5avq-r9hj/about_data) <br>
+[Cleaned Dataset](CityOfSeattleWageData.xlsx) <br><br>
 **Notes**<br>
 _Values represent average hourly wages._ <br>
 _Some racial groups may have smaller sample sizes, which can affect comparisons._<br>

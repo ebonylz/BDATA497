@@ -26,8 +26,10 @@ Additional data decisions were made to improve clarity and reliability. Departme
 [View Racial Imbalance Visualization](https://public.flourish.studio/visualisation/28621861) <br>
 [View Race and Gender Representation Visualization](https://public.flourish.studio/visualisation/28620858/) <br><br>
 
-### Data Source <br>
-[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Staff-Demographics/5avq-r9hj/about_data) <br>
+## Data Source
+
+City of Seattle Staff Demographics Dataset (2026).  
+Seattle Open Data Portal: https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd/about_data <br>
 [Cleaned Dataset](CityOfSeattleWageData.xlsx) <br><br>
 
 ### Notes <br>

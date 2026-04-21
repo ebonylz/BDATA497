@@ -9,7 +9,7 @@ The data comes from the City of Seattle Staff Demographics dataset (2026), which
 **Published Visualization**
 [View my visualization](https://public.flourish.studio/visualisation/28548056/)<br><br>
 Data Source<br>
-[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Staff-Demographics/5avq-r9hj/about_data) <br>
+[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd/about_data) <br>
 [Cleaned Dataset](CityOfSeattleWageData.xlsx) <br><br>
 **Notes**<br>
 _Values represent average hourly wages._ <br>

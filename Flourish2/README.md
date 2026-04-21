@@ -2,13 +2,13 @@
 This project analyzes patterns in the City of Seattle Staff Demographics dataset (2026) using visualizations created in Flourish. Instead of only showing the data, these charts focus on evaluating how well the dataset represents employees across race, gender, and departments. The goal is to highlight patterns in representation and consider the limitations of the dataset when making comparisons.
 
 ## Visualizations<br>
-**Gender Imbalance Across Seattle City Departments** <br><br>
+### Gender Imbalance Across Seattle City Departments <br><br>
 ![Gender Imbalance Across Seattle City Departments](Gender_Imbalance_Across_Seattle_City_Departments.png) <br>
 This visualization shows the percentage of male and female employees within each department. It highlights that some departments have much larger gender gaps than others, suggesting uneven gender representation across the workforce. These differences raise questions about how balanced the workforce is across departments and how that might affect interpretation of other comparisons.<br><br>
-**Racial Representation Across Seattle City Departments** <br><br>
+### Racial Representation Across Seattle City Departments <br><br>
 ![Racial Representation Across Seattle City Departments](Racial_Representation_Across_Seattle_City_Departments.png)<br>
-This chart shows the percentage distribution of employees by race within each department. It demonstrates that racial representation varies across departments, with some departments being dominated by one group and others showing more diversity. This variation suggests that the dataset may not evenly represent all groups across the workforce.<br><br>
-**Uneven Representation Across Race and Gender in Seattle’s Workforce**<br><br>
+This chart shows the percentage distribution of employees by race within each department. It demonstrates that racial representation varies across departments, with every departments being dominated by one group and some having more diversity. This variation suggests that the dataset may not evenly represent all groups across the workforce.<br><br>
+### Uneven Representation Across Race and Gender in Seattle’s Workforce<br><br>
  ![Uneven Representation Across Race and Gender in Seattle’s Workforce](Uneven_Representation_Across_Race_and_Gender_in_Seattle_Workforce.png)<br>
 This visualization compares male and female representation across different racial groups. It shows that gender gaps are not consistent across races, and some groups have significantly larger imbalances. This raises concerns about how reliable comparisons are when representation is uneven.<br><br>
 ## Data Cleaning and Preparation <br>
@@ -28,9 +28,9 @@ Additional data decisions were made to improve clarity and reliability. Departme
 
 ## Data Source
 
-City of Seattle Staff Demographics Dataset (2026).  
-Seattle Open Data Portal: https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd/about_data <br>
+[City of Seattle Staff Demographics Dataset (2026)](https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd/about_data) <br>
 [Cleaned Dataset](CityOfSeattleWageData.xlsx) <br><br>
 
-### Notes <br>
-Values in the charts represent percentages of employees within each category. Uneven group sizes and differences in representation may affect how reliable comparisons are across groups. The decisions to exclude smaller departments and combine smaller racial categories were made to improve readability, but they may also influence how the data is interpreted.
+## Notes <br>
+Values in the charts represent percentages of employees within each category. Uneven group sizes and differences in representation may affect how reliable comparisons are across groups. The decisions to exclude smaller departments and combine smaller racial categories were made to improve readability, but they may also influence how the data is interpreted.<br><br>
+For Seattle open portal you must copy the link address and paste into search bar. For some reason there is issues with github opening the link directly.

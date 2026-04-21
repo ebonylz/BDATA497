@@ -11,7 +11,7 @@ This visualization compares male and female representation across different raci
 **Data Cleaning and Preparation**<br>
 The dataset was cleaned and prepared in Excel before creating the visualizations. I first calculated the count of employees in each category, including race, gender, and department. Using those counts, I calculated averages and percentages for each grouping.<br>
 
-**For each visualization:**
+**For each visualization:**<br>
 Gender vs Race: calculated the percentage of male versus female within each racial group<br>
 Race vs Department: calculated the percentage of each race within each department<br>
 Gender vs Department: calculated the percentage of male versus female within each department<br><br>

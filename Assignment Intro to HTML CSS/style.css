@@ -1,0 +1,53 @@
+body { /* Base edits */
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 16px;
+  background-color: #f6bae0;
+  padding: 1em;
+}
+
+#review-page { /* the box that holds everything */
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #e3d7e4;
+  padding: 2em;
+  border-radius: 16px;
+}
+
+h1 {
+  font-size: 3em;
+  color: #6600a6;
+  text-align: center;
+  margin: 0.25em 0;
+}
+
+h3 {
+  font-size: 1.5em;
+  color: #e269ff;
+  text-align: center;
+  margin: 0.25em 0 1em 0;
+}
+
+.game-image {
+  display: block;
+  max-width: 500px;
+  width: 100%;
+  margin: 1em auto;
+  border-radius: 12px;
+}
+
+.image-credit {
+  font-size: 0.9em;
+  color: #777777;
+  text-align: center;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #333333;
+}
+
+a {
+  color: #8400ff;
+  font-weight: bold;
+}

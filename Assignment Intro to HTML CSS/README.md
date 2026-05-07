@@ -14,7 +14,8 @@ This project is a public-facing review webpage about Tomodachi Life created usin
 - Custom fonts and formatting
 
 ## Screenshot
-![Screenshot](HTMLPage.png)
+![Screenshot](HTMLPage.jpg)
+- Page zoomed out to 65 % in order to get all of the page into one screenshot.
 
 ## Author
 Ebony Lopez

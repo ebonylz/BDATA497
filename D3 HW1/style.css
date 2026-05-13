@@ -1,1 +1,19 @@
-/* TBD*/
+body {
+    font-family: "Source Sans 3", sans-serif;
+    margin: 30px;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+svg {
+    background-color: #f7f7f7;
+    display: block;
+    margin: auto;
+}
+
+text {
+    font-size: 8px;
+}

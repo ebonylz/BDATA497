@@ -14,4 +14,4 @@ https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd
 - DepAvgWage.csv
 
 ## Visualization
-![Chart Screenshot](AvgWageByDep.png)
+![Chart Screenshot](D3HW1.jpg)

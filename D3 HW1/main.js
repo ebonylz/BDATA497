@@ -1,7 +1,7 @@
 //Declare consts/global variables
 const margin = 120;
 const width = 1200; 
-const height = 600;
+const height = 500;
 
 
 //Load data and related variables
@@ -61,7 +61,7 @@ d3.csv("DepAvgWage.csv").then(data => {
     .attr("transform", "translate(0," + (height - margin) + ")") 
     .call(bottomAxis)
     .selectAll("text")
-    .attr("transform", "rotate(-65)")
+    .attr("transform", "rotate(-60)")
     .style("text-anchor", "end")
     .style("font-size", "8px");
 

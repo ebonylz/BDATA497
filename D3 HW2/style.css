@@ -1,1 +1,99 @@
-/* TBD*/
+body {
+    font-family: "Source Sans 3", sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 30px;
+    text-align: center;
+}
+
+h1 {
+    color: midnightblue;
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+svg {
+    display: block;
+    margin: auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
+    padding: 10px;
+}
+
+.axis path,
+.axis line{
+    stroke: midnightblue;
+}
+
+.axis text{
+    font-family: sans-serif;
+    font-size: 10px;
+    fill: midnightblue;
+}
+
+.line{
+    fill: none;
+    stroke-width: 3.5px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    opacity: .95;
+}
+
+.title{
+    font-family: sans-serif;
+    font-size: 34px;
+    fill: midnightblue;
+    font-weight: bold;
+}
+
+.label{
+    font-family: sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+}
+.credit {
+    font-family: sans-serif;
+    font-size: 13px;
+    fill: #666;
+}
+
+.creditLink {
+    font-family: sans-serif;
+    font-size: 13px;
+    fill: steelblue;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+.resources {
+    margin-top: -10px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    color: #666;
+}
+
+.resources a {
+    color: steelblue;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.resources a:hover {
+    color: midnightblue;
+}
+.grid line {
+    stroke: lightgray;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+
+.grid path {
+    stroke-width: 0;
+}

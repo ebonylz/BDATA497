@@ -1,13 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>HW Template</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+3">
-        <link rel="stylesheet" href="./style.css">
-    </head>
-    <body>
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-        <script src="./main.js"></script>       
-    </body>
+<head>
+    <meta charset="utf-8">
+    <title>Seattle Wages by Department and Age</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+3">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <main class="container">
+        <section class="intro">
+            <p class="eyebrow">Seattle Open Data</p>
+            <h1>How hourly wages change by department and age group</h1>
+            <p>
+                Explore average hourly wages for large Seattle departments across different age groups.
+                Use the dropdown to select an age group and the checkbox to sort from highest to lowest.
+            </p>
+        </section>
+
+        <section class="controls">
+            <label for="ageSelect">Age group:</label>
+
+            <select id="ageSelect">
+                <option value="<30">&lt;30</option>
+                <option value="30 - 40">30 - 40</option>
+                <option value="40 - 50">40 - 50</option>
+                <option value="50 - 60">50 - 60</option>
+                <option value="60 +">60 +</option>
+            </select>
+
+            <label class="checkbox">
+                <input type="checkbox" id="sortCheck">
+                Sort highest to lowest
+            </label>
+        </section>
+
+        <div id="chart"></div>
+
+        <p class="source">
+            Source:
+            <a href="https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd/about_data" target="_blank">
+                Seattle Open Data Portal — City of Seattle Wage Data
+            </a>
+        </p>
+    </main>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="./main.js"></script>
+</body>
 </html>

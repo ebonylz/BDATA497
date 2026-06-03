@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seattle's Emergency Calls Tell a Bigger Story</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+  <div class="top-bar"></div>
+  <div class="gold-bar"></div>
+
+  <!-- ======= HEADER ======= -->
+  <header>
+    <div class="label">Seattle Public Safety · Data Narrative</div>
+    <h1>Seattle's Emergency Calls Tell a Bigger Story</h1>
+    <p class="subtitle">
+      What 911 call data from 2020 and 2025 reveals about healthcare,
+      mental health, and what public safety actually looks like.
+    </p>
+    <div class="header-meta">
+      <span>Source: Seattle Open Data Portal</span>
+      <span>Data: 2020 &amp; 2025 911 Calls</span>
+      <span>~180,000 calls per year</span>
+      <span>By Ebony Lopez</span>
+    </div>
+  </header>
+
+  <!-- ======= STAT ROW ======= -->
+  <div class="stat-row">
+    <div class="stat-block">
+      <span class="stat-number" id="stat-total-2020">—</span>
+      <span class="stat-label">911 Calls in 2020</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-number" id="stat-total-2025">—</span>
+      <span class="stat-label">911 Calls in 2025</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-number" id="stat-top-cat">—</span>
+      <span class="stat-label">Top Call Type (2025)</span>
+    </div>
+    <div class="stat-block">
+      <span class="stat-number">5</span>
+      <span class="stat-label">SPD Precincts</span>
+    </div>
+  </div>
+
+  <!-- ======= INTRO ======= -->
+  <div class="intro-block">
+    <div class="so-what">
+      <span>Why this matters</span>
+      When most people think of 911, they picture violent crime. But Seattle's
+      call data tells a different story — one where mental health crises, welfare
+      checks, and disturbances account for far more emergency responses than
+      shootings or assaults. Understanding what people actually call 911 for is
+      the first step toward building a public safety system that can actually meet
+      those needs.
+    </div>
+    <p>
+      In 2020, Seattle was at a flashpoint. The COVID-19 pandemic reshaped daily
+      life, and the nationwide response to George Floyd's death brought urgent
+      questions about what public safety should look like. Five years later, those
+      debates are still unresolved — but the data has continued to accumulate.
+    </p>
+    <p>
+      This project explores 911 call records from both years to ask: what kinds
+      of emergencies are people actually experiencing? Where do they happen? And
+      how have those patterns changed? The data shows that emergency response in
+      Seattle is deeply tied to housing, healthcare access, and mental health —
+      not just policing.
+    </p>
+  </div>
+
+  <!-- ======= SECTION 1: CALL DISTRIBUTION ======= -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 1 — Call Distribution</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Medical and wellness-related calls make up a much larger portion of Seattle's emergency response than most people expect</h2>
+    <p class="section-text">
+      The top 12 call categories in 2025 — ranked by volume. Hover over any bar
+      to see the exact count. Violent crime categories sit far down the list.
+    </p>
+    <div class="chart-card">
+      <div id="bar-chart"></div>
+    </div>
+    <div class="callout">
+      <strong>So what?</strong> The categories dominating Seattle's 911 log —
+      suspicious circumstances, disturbances, welfare checks — are situations
+      where a police response may not always be the best fit. Cities that have
+      added mental health co-responders and community navigators to their
+      emergency systems have seen reduced repeat calls for these same categories.
+    </div>
+  </section>
+
+  <!-- ======= SECTION 2: 2020 VS 2025 COMPARE ======= -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 2 — How Calls Changed After 2020</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Emergency call patterns shifted during and after COVID-19</h2>
+    <p class="section-text">
+      Each row shows the same call category in 2020 (gold dot) and 2025 (purple dot).
+      A line connects the two — movement to the right means more calls; left means fewer.
+      Hover to compare exact values.
+    </p>
+    <div class="chart-card">
+      <div class="legend">
+        <span><span class="legend-dot dot-2020"></span>2020</span>
+        <span><span class="legend-dot dot-2025"></span>2025</span>
+      </div>
+      <div id="compare-chart"></div>
+    </div>
+    <div class="callout">
+      <strong>Context:</strong> The pandemic years brought major shifts in how
+      people interacted with emergency services — lockdowns, economic stress, and
+      disrupted mental health care all affected call volumes. Some of those shifts
+      have persisted well into 2025.
+    </div>
+  </section>
+
+  <!-- ======= SECTION 3: BIGGEST CHANGES ======= -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 3 — Biggest Changes Since 2020</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Some call types grew significantly — others dropped. The changes point to real shifts in community need.</h2>
+    <p class="section-text">
+      Green bars show call types that increased from 2020 to 2025; red bars show
+      those that decreased. The length of each bar shows the size of the change.
+    </p>
+    <div class="chart-card">
+      <div id="change-chart"></div>
+    </div>
+    <div class="callout">
+      <strong>So what?</strong> Sustained increases in certain call categories
+      are a signal — not just of more crime or disorder, but often of unmet need.
+      An uptick in welfare check calls, for example, may reflect gaps in mental
+      health services rather than a spike in danger.
+    </div>
+  </section>
+
+  <!-- ======= SECTION 4: TIME OF DAY ======= -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 4 — When Are People Calling?</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Afternoon and evening hours consistently drive the highest call volume in both years</h2>
+    <p class="section-text">
+      Calls are grouped into three eight-hour shifts matching typical police patrol
+      scheduling. The 2PM–10PM window is the busiest in both 2020 and 2025.
+    </p>
+    <div class="chart-card">
+      <div class="legend">
+        <span><span class="legend-dot dot-2020"></span>2020</span>
+        <span><span class="legend-dot dot-2025"></span>2025</span>
+      </div>
+      <div id="shift-chart"></div>
+    </div>
+  </section>
+
+  <!-- ======= SECTION 5: PRECINCT ======= -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 5 — Different Neighborhoods, Different Emergencies</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Different Seattle precincts experience very different emergency response demand</h2>
+
+    <div class="precinct-layout">
+      <figure class="precinct-img-wrap">
+        <img
+          src="https://images.seattletimes.com/wp-content/uploads/2015/02/a5b0faba-abfd-11e4-b512-ca68485b3005.jpg?d=1020x2033"
+          alt="Seattle Police Precinct Map showing North, East, South, West, and Southwest precincts"
+        >
+        <figcaption>SPD precinct boundaries. &copy; Seattle Times / SPD.</figcaption>
+      </figure>
+      <div class="precinct-text">
+        <p>Seattle's five precincts — North, East, South, West, and Southwest —
+        each cover distinct neighborhoods with different demographics, housing
+        conditions, and access to community resources. Emergency response demand
+        is not spread evenly across the city.</p>
+        <p>Population density, healthcare access, housing stability, and the
+        presence (or absence) of social services all shape how often and why
+        residents call 911. The West Precinct, which covers downtown and
+        surrounding areas, has historically handled a high share of
+        crisis-related calls.</p>
+        <p>Comparing how each precinct's call volume changed between 2020 and
+        2025 helps show where community needs may be growing — and where
+        investment in non-police support services might make the biggest difference.</p>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="legend">
+        <span><span class="legend-dot dot-2020"></span>2020</span>
+        <span><span class="legend-dot dot-2025"></span>2025</span>
+      </div>
+      <div id="precinct-chart"></div>
+    </div>
+  </section>
+
+  <!-- ======= CONCLUSION ======= -->
+  <div class="intro-block" style="margin-top:0;">
+    <div class="so-what">
+      <span>Takeaway</span>
+      Seattle's 911 data makes one thing clear: public safety is about much more
+      than policing alone. The calls coming in every day reflect a city navigating
+      overlapping crises — housing, mental health, substance use, and poverty. A
+      public safety system built only around a police response will keep getting
+      called to situations it wasn't designed to handle.
+    </div>
+    <p>
+      The data also shows that these patterns are not static. COVID-19 shifted
+      call volumes in ways that have not fully reversed. As Seattle continues to
+      debate how to staff and fund emergency response, this call log is one of
+      the clearest records of what communities actually need help with — and how
+      that need changes over time.
+    </p>
+  </div>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <!-- ======= FOOTER / REFERENCES ======= -->
+  <footer>
+    <div class="footer-inner">
+      <h3>References &amp; Data Sources</h3>
+      <ol>
+        <li>
+          City of Seattle Open Data Portal. <em>Call Data — 911 Calls (2020).</em>
+          Seattle, WA: City of Seattle.
+          <a href="https://data.seattle.gov/Public-Safety/Call-Data/33kz-ixgy" target="_blank">data.seattle.gov</a>.
+          Filtered to Call Type = "911," sorted by Event Arrived Time. Accessed 2025.
+        </li>
+        <li>
+          City of Seattle Open Data Portal. <em>Call Data — 911 Calls (2025).</em>
+          Seattle, WA: City of Seattle.
+          <a href="https://data.seattle.gov/Public-Safety/Call-Data/33kz-ixgy" target="_blank">data.seattle.gov</a>.
+          Filtered to Call Type = "911," sorted by Event Arrived Time. Accessed 2025.
+        </li>
+        <li>
+          Bostock, Mike, et al. <em>D3.js — Data-Driven Documents</em>, version 7.
+          <a href="https://d3js.org" target="_blank">d3js.org</a>.
+          Open-source library used for all visualizations. No modifications to source.
+        </li>
+        <li>
+          Google Fonts. <em>Encode Sans</em> (Impallari Type) and <em>Open Sans</em>
+          (Steve Matteson / Google). <a href="https://fonts.google.com" target="_blank">fonts.google.com</a>.
+          Open Font License. Loaded via Google Fonts CDN. Used per UW brand font guidelines.
+        </li>
+        <li>
+          University of Washington. <em>UW Brand — Colors.</em>
+          <a href="https://www.washington.edu/brand/brand-elements/colors/" target="_blank">washington.edu/brand/brand-elements/colors/</a>.
+          Color palette (Spirit Purple #4b2e83, Husky Gold #b7a57a, Spirit Gold #ffc700,
+          Heritage Gold #85754d) applied per UW digital brand guidelines.
+        </li>
+        <li>
+          University of Washington. <em>UW Brand — Fonts.</em>
+          <a href="https://www.washington.edu/brand/brand-elements/fonts/" target="_blank">washington.edu/brand/brand-elements/fonts/</a>.
+          Encode Sans and Open Sans used as primary typefaces per UW brand recommendations.
+        </li>
+        <li>
+          Seattle Times / Seattle Police Department. Precinct boundary reference map.
+          <a href="https://www.seattletimes.com" target="_blank">seattletimes.com</a>, 2015.
+          Used for geographic reference context only.
+        </li>
+        <li>
+          Hunter, Mark Lee. <em>Story-Based Inquiry: A Manual for Investigative Journalists.</em>
+          UNESCO, 2011. Narrative framework referenced in course assignment guidelines.
+        </li>
+        <li>
+          City of Seattle Police Department. <em>Crisis Contact Data.</em>
+          <a href="https://www.seattle.gov/police/information-and-data" target="_blank">seattle.gov/police/information-and-data</a>.
+          Background context on SPD co-response programs and call categories.
+        </li>
+      </ol>
+      <p class="footer-note">
+        All datasets are public data from the Seattle Open Data Portal and are included in the
+        project GitHub repository. Visualizations built with D3.js v7 only — no additional
+        charting libraries used. Typography and color follow the official UW Brand Guidelines.
+        Data covers calendar year 2020 and 2025 records, filtered to 911 call type only.
+      </p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

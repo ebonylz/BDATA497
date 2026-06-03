@@ -1,0 +1,22 @@
+ h1 {
+              font-family: "Helvetica", "Arial", sans-serif;
+              font-size: 28px;
+              color: midnightblue;
+            }
+
+            /* this is how we are styling all of our Ps */
+            p {
+              font-family: "Helvetica", "Arial", sans-serif;
+              font-size: 14px;
+              color: midnightblue;
+            }
+
+            /*this is how we are styling the axes for BOTH charts*/
+            .axis path, 
+            .axis line{
+                stroke: midnightblue;
+            }
+            .axis text{
+                font-family: "Helvetica", "Arial", sans-serif;
+                color: midnightblue;
+                }        

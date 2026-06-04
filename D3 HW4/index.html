@@ -1,13 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>HW Template</title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+3">
-        <link rel="stylesheet" href="./style.css">
-    </head>
-    <body>
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-        <script src="./main.js"></script>       
-    </body>
+
+<head>
+    <meta charset="utf-8">
+    <title>Seattle Wage Gaps by Race and Gender</title>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+3">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Seattle Wage Gaps by Race and Gender</h1>
+
+        <p class="subtitle">
+            This visualization compares average hourly wages for male and female
+            City of Seattle employees across racial groups.
+        </p>
+
+        <p class="story-text">
+            Looking only at overall averages can hide important differences.
+            By comparing wages within racial groups, we can see how large the
+            gender wage gap is for each group. Larger distances between the
+            blue and pink dots indicate larger differences in average pay.
+        </p>
+
+        <div id="chart" class="chart-box"></div>
+
+        <div class="chart-explanation">
+            <h2>Not all wage gaps are the same size.</h2>
+
+            <p>
+                Some racial groups show relatively small differences between
+                male and female wages, while others show much larger gaps.
+                Comparing groups side-by-side makes these differences easier
+                to see than a single overall average.
+            </p>
+
+            <p>
+                Hover over each dot to see the exact average wage.
+            </p>
+        </div>
+
+        <div class="notes">
+            <p>
+                <strong>Data Source:</strong>
+                <a href="https://data.seattle.gov/City-Administration/City-of-Seattle-Wage-Data/2khk-5ukd"
+                   target="_blank">
+                    Seattle Open Data Portal Wage Data
+                </a>
+            </p>
+
+            <p>
+                Visualization created by Ebony Lopez using D3.js v7.
+            </p>
+        </div>
+
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="./main.js"></script>
+
+</body>
+
 </html>

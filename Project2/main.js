@@ -371,7 +371,6 @@ function drawPopAdjChangeChart(data2020, data2025, populationData) {
     .call(gg => gg.select(".domain").remove());
 }
 
-
 // ========================================
 // CHART — HOUR BY CALL TYPE (Interactive)
 // Line chart showing 2025 calls by hour,
@@ -381,25 +380,24 @@ function drawPopAdjChangeChart(data2020, data2025, populationData) {
 function drawHourByCallTypeChart(data2025) {
   const parseTime = d3.timeParse("%Y %b %d %I:%M:%S %p");
 
-  // Parse hours from data
   const parsed = data2025.map(d => ({
-    hour: (() => { const t = parseTime(d["CAD Event Arrived Time"]); return t ? t.getHours() : null; })(),
+    hour: (() => {
+      const t = parseTime(d["CAD Event Arrived Time"]);
+      return t ? t.getHours() : null;
+    })(),
     eventGroup: d["Event Group"]?.trim() || ""
   })).filter(d => d.hour !== null && d.eventGroup);
 
-  // Get top 10 event groups
   const topGroups = Array.from(
     d3.rollup(parsed, v => v.length, d => d.eventGroup),
     ([group, count]) => ({ group, count })
   ).sort((a, b) => b.count - a.count).slice(0, 10).map(d => d.group);
 
-  // Build hour counts for ALL calls
   const allHourMap = new Map();
   d3.range(24).forEach(h => allHourMap.set(h, 0));
   parsed.forEach(d => allHourMap.set(d.hour, (allHourMap.get(d.hour) || 0) + 1));
 
-  // Build hour counts per event group
-  const groupHourMap = new Map(); // group -> Map(hour -> count)
+  const groupHourMap = new Map();
   topGroups.forEach(g => {
     const hmap = new Map();
     d3.range(24).forEach(h => hmap.set(h, 0));
@@ -407,7 +405,6 @@ function drawHourByCallTypeChart(data2025) {
     groupHourMap.set(g, hmap);
   });
 
-  // Populate the select dropdown
   const sel = d3.select("#calltype-select");
   topGroups.forEach(g => {
     sel.append("option").attr("value", g).text(g);
@@ -429,10 +426,8 @@ function drawHourByCallTypeChart(data2025) {
   const x = d3.scaleLinear().domain([0, 23]).range([0, width]);
   const y = d3.scaleLinear().range([height, 0]);
 
-  // Grid lines
   const yGrid = g.append("g").attr("class", "grid");
 
-  // Area + line generators
   const area = d3.area()
     .x(d => x(d.hour))
     .y0(height)
@@ -444,21 +439,17 @@ function drawHourByCallTypeChart(data2025) {
     .y(d => y(d.count))
     .curve(d3.curveCatmullRom.alpha(0.5));
 
-  // Area path (filled)
   const areaPath = g.append("path")
     .attr("fill", UW_PURPLE)
     .attr("fill-opacity", 0.12);
 
-  // Line path
   const linePath = g.append("path")
     .attr("fill", "none")
     .attr("stroke", UW_PURPLE)
     .attr("stroke-width", 2.5);
 
-  // Dots for hover
   const dots = g.append("g");
 
-  // X axis
   const xAxis = g.append("g")
     .attr("class", "axis")
     .attr("transform", `translate(0,${height})`)
@@ -476,7 +467,6 @@ function drawHourByCallTypeChart(data2025) {
     .attr("text-anchor", "end")
     .attr("dy", "0.35em");
 
-  // X axis label
   g.append("text")
     .attr("class", "label")
     .attr("x", width / 2)
@@ -484,11 +474,9 @@ function drawHourByCallTypeChart(data2025) {
     .attr("text-anchor", "middle")
     .text("Hour of day (2025)");
 
-  // Y axis group
   const yAxisG = g.append("g").attr("class", "axis");
 
-  // Y axis label
-  const yLabel = g.append("text")
+  g.append("text")
     .attr("class", "label")
     .attr("transform", "rotate(-90)")
     .attr("x", -height / 2)
@@ -496,7 +484,6 @@ function drawHourByCallTypeChart(data2025) {
     .attr("text-anchor", "middle")
     .text("Number of calls");
 
-  // Peak label
   const peakLabel = g.append("text")
     .attr("class", "label")
     .attr("fill", UW_PURPLE)
@@ -505,7 +492,12 @@ function drawHourByCallTypeChart(data2025) {
 
   function updateChart(groupKey) {
     const hourMap = groupKey === "ALL" ? allHourMap : groupHourMap.get(groupKey);
-    const chartData = hours.map(h => ({ hour: h, count: hourMap.get(h) || 0 }));
+
+    const chartData = hours.map(h => ({
+      hour: h,
+      count: hourMap.get(h) || 0,
+      group: groupKey
+    }));
 
     const total = d3.sum(chartData, d => d.count);
     d3.select("#calltype-total").text(`${d3.format(",")(total)} total calls in 2025`);
@@ -516,14 +508,14 @@ function drawHourByCallTypeChart(data2025) {
     yGrid.call(
       d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat("")
     ).call(gg => gg.select(".domain").remove())
-     .selectAll(".tick line").attr("stroke", "#f0eee9");
+      .selectAll(".tick line").attr("stroke", "#f0eee9");
 
-    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(","))).call(gg => gg.select(".domain").remove());
+    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(",")))
+      .call(gg => gg.select(".domain").remove());
 
     areaPath.datum(chartData).transition().duration(400).attr("d", area);
     linePath.datum(chartData).transition().duration(400).attr("d", line);
 
-    // Peak annotation
     const peak = chartData.reduce((a, b) => b.count > a.count ? b : a);
     peakLabel
       .attr("x", x(peak.hour))
@@ -531,8 +523,8 @@ function drawHourByCallTypeChart(data2025) {
       .attr("text-anchor", peak.hour > 18 ? "end" : "middle")
       .text(`Peak: ${formatHour(peak.hour)} (${d3.format(",")(peak.count)})`);
 
-    // Dots
     const dotSel = dots.selectAll("circle").data(chartData);
+
     dotSel.enter().append("circle")
       .attr("r", 4)
       .attr("fill", UW_PURPLE)
@@ -541,13 +533,13 @@ function drawHourByCallTypeChart(data2025) {
       .style("cursor", "pointer")
       .on("mouseover", (event, d) =>
         showTip(
-          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `<strong>${d.group === "ALL" ? "All calls" : d.group}</strong><br>` +
           `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
           event
         ))
       .on("mousemove", (event, d) =>
         showTip(
-          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `<strong>${d.group === "ALL" ? "All calls" : d.group}</strong><br>` +
           `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
           event
         ))
@@ -560,36 +552,38 @@ function drawHourByCallTypeChart(data2025) {
     dotSel.exit().remove();
   }
 
-  // Initial render
   updateChart("ALL");
 
-  // Dropdown listener
-  sel.on("change", function() {
+  sel.on("change", function () {
     updateChart(this.value);
   });
 }
 
+// ========================================
+// CHART — HOUR BY CALL TYPE (2020 version)
+// Same chart as above but uses 2020 data and gold color
+// ========================================
 
 function drawHourByCallTypeChart2020(data2020) {
   const parseTime = d3.timeParse("%Y %b %d %I:%M:%S %p");
 
   const parsed = data2020.map(d => ({
-    hour: (() => { const t = parseTime(d["CAD Event Arrived Time"]); return t ? t.getHours() : null; })(),
+    hour: (() => {
+      const t = parseTime(d["CAD Event Arrived Time"]);
+      return t ? t.getHours() : null;
+    })(),
     eventGroup: d["Event Group"]?.trim() || ""
   })).filter(d => d.hour !== null && d.eventGroup);
 
-  // Top 10 event groups from 2020 data
   const topGroups = Array.from(
     d3.rollup(parsed, v => v.length, d => d.eventGroup),
     ([group, count]) => ({ group, count })
   ).sort((a, b) => b.count - a.count).slice(0, 10).map(d => d.group);
 
-  // All-calls hour map
   const allHourMap = new Map();
   d3.range(24).forEach(h => allHourMap.set(h, 0));
   parsed.forEach(d => allHourMap.set(d.hour, (allHourMap.get(d.hour) || 0) + 1));
 
-  // Per-group hour maps
   const groupHourMap = new Map();
   topGroups.forEach(g => {
     const hmap = new Map();
@@ -598,7 +592,6 @@ function drawHourByCallTypeChart2020(data2020) {
     groupHourMap.set(g, hmap);
   });
 
-  // Populate dropdown
   const sel = d3.select("#calltype-select-2020");
   topGroups.forEach(g => {
     sel.append("option").attr("value", g).text(g);
@@ -644,7 +637,6 @@ function drawHourByCallTypeChart2020(data2020) {
 
   const dots = g.append("g");
 
-  // X axis
   const xAxis = g.append("g")
     .attr("class", "axis")
     .attr("transform", `translate(0,${height})`)
@@ -687,7 +679,12 @@ function drawHourByCallTypeChart2020(data2020) {
 
   function updateChart(groupKey) {
     const hourMap = groupKey === "ALL" ? allHourMap : groupHourMap.get(groupKey);
-    const chartData = hours.map(h => ({ hour: h, count: hourMap.get(h) || 0 }));
+
+    const chartData = hours.map(h => ({
+      hour: h,
+      count: hourMap.get(h) || 0,
+      group: groupKey
+    }));
 
     const total = d3.sum(chartData, d => d.count);
     d3.select("#calltype-total-2020").text(`${d3.format(",")(total)} total calls in 2020`);
@@ -698,9 +695,10 @@ function drawHourByCallTypeChart2020(data2020) {
     yGrid.call(
       d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat("")
     ).call(gg => gg.select(".domain").remove())
-     .selectAll(".tick line").attr("stroke", "#f0eee9");
+      .selectAll(".tick line").attr("stroke", "#f0eee9");
 
-    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(","))).call(gg => gg.select(".domain").remove());
+    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(",")))
+      .call(gg => gg.select(".domain").remove());
 
     areaPath.datum(chartData).transition().duration(400).attr("d", area);
     linePath.datum(chartData).transition().duration(400).attr("d", line);
@@ -713,6 +711,7 @@ function drawHourByCallTypeChart2020(data2020) {
       .text(`Peak: ${formatHour(peak.hour)} (${d3.format(",")(peak.count)})`);
 
     const dotSel = dots.selectAll("circle").data(chartData);
+
     dotSel.enter().append("circle")
       .attr("r", 4)
       .attr("fill", UW_GOLD)
@@ -721,13 +720,13 @@ function drawHourByCallTypeChart2020(data2020) {
       .style("cursor", "pointer")
       .on("mouseover", (event, d) =>
         showTip(
-          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `<strong>${d.group === "ALL" ? "All calls" : d.group}</strong><br>` +
           `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
           event
         ))
       .on("mousemove", (event, d) =>
         showTip(
-          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `<strong>${d.group === "ALL" ? "All calls" : d.group}</strong><br>` +
           `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
           event
         ))
@@ -742,7 +741,7 @@ function drawHourByCallTypeChart2020(data2020) {
 
   updateChart("ALL");
 
-  sel.on("change", function() {
+  sel.on("change", function () {
     updateChart(this.value);
   });
 }
@@ -887,7 +886,7 @@ function formatHour(hour) {
 }
 
 // ========================================
-// CHART X — STANDARDIZED PRIORITY RATES
+// CHART— STANDARDIZED PRIORITY RATES
 // Calls per 100,000 residents
 // ========================================
 

@@ -7,7 +7,7 @@
 //   1. Horizontal bar  — 2025 top categories
 //   2. Dumbbell        — 2020 vs 2025 compare
 //   3. Diverging bar   — biggest changes
-//   4. Grouped bar     — calls by shift/time of day
+//   4. Line + area     — calls by hour (2025, with dropdown to filter by call type)
 //
 // Colors from UW Brand Guidelines:
 //   Spirit Purple  #4b2e83
@@ -373,7 +373,7 @@ function drawPopAdjChangeChart(data2020, data2025, populationData) {
 
 
 // ========================================
-// CHART 4 — HOUR BY CALL TYPE (Interactive)
+// CHART — HOUR BY CALL TYPE (Interactive)
 // Line chart showing 2025 calls by hour,
 // with dropdown to filter by event group
 // ========================================
@@ -571,7 +571,7 @@ function drawHourByCallTypeChart(data2025) {
 
 
 // ========================================
-// CHART 4B — HOUR BY CALL TYPE (2020 version)
+// CHART — HOUR BY CALL TYPE (2020 version)
 // Same chart as above but uses 2020 data and gold color
 // ========================================
 
@@ -753,7 +753,7 @@ function drawHourByCallTypeChart2020(data2020) {
 }
 
 // ========================================
-// SECTION X: STANDARDIZED HOUR OF DAY HEATMAP
+// SECTION: STANDARDIZED HOUR OF DAY HEATMAP
 // Calls per 100,000 residents
 // ========================================
 
@@ -1007,7 +1007,7 @@ function drawPriorityRateChart(data2020, data2025, populationData) {
     .call(gg => gg.select(".domain").remove());
 }
 // ========================================
-// CHART X — EVENT GROUP × PRIORITY HEATMAP
+// CHART— EVENT GROUP × PRIORITY HEATMAP
 // Each priority uses its own gradient
 // Hover shows count + percentage within priority
 // ========================================

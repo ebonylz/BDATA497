@@ -1,0 +1,155 @@
+body {
+    font-family: "Source Sans 3", sans-serif;
+    margin: 0;
+    background: linear-gradient(180deg, #f6f1eb 0%, #f8f8f8 100%);
+    color: #222;
+}
+
+.container {
+    max-width: 1120px;
+    margin: auto;
+    padding: 50px 40px;
+}
+
+.header {
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto 35px auto;
+}
+
+h1 {
+    font-size: 46px;
+    line-height: 1.05;
+    margin-bottom: 14px;
+    color: #1f2933;
+}
+
+.subtitle {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #4b5563;
+    margin-bottom: 14px;
+}
+
+.story-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #374151;
+    max-width: 780px;
+    margin: auto;
+}
+
+.chart-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+svg {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.12);
+    border: 1px solid #eeeeee;
+}
+
+.chart-title {
+    font-size: 22px;
+    font-weight: 800;
+    fill: #1f2933;
+}
+
+.axis path,
+.axis line {
+    stroke: #d1d5db;
+}
+
+.axis text {
+    font-size: 13px;
+    fill: #374151;
+}
+
+.grid line {
+    stroke: #edf0f2;
+}
+
+.grid path {
+    display: none;
+}
+
+.connection {
+    stroke: #9ca3af;
+    stroke-width: 4;
+    opacity: 0.65;
+    stroke-linecap: round;
+}
+
+.male {
+    fill: #2563eb;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.female {
+    fill: #db2777;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    fill: #4b5563;
+}
+
+.tooltip {
+    position: absolute;
+    background: #111827;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    pointer-events: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,.22);
+    opacity: 0;
+    line-height: 1.4;
+}
+
+.chart-explanation {
+    max-width: 760px;
+    margin: 35px auto 20px auto;
+    padding: 24px 28px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(31, 41, 55, 0.08);
+    border-left: 6px solid #db2777;
+}
+
+.chart-explanation h2 {
+    font-size: 25px;
+    margin: 0 0 10px 0;
+    color: #1f2933;
+}
+
+.chart-explanation p {
+    color: #4b5563;
+    line-height: 1.65;
+    margin: 10px 0;
+}
+
+.notes {
+    max-width: 760px;
+    margin: 25px auto 0 auto;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+a {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

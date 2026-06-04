@@ -260,7 +260,7 @@
       <strong>Context:</strong> The pandemic years brought major shifts in how
       people interacted with emergency services. Lockdowns, economic stress, and
       disrupted mental health care all affected call volumes. Some of those shifts
-      have persisted well into 2025 — even after accounting for a larger population.
+      have persisted well into 2025, even after accounting for a larger population.
       Research on post-pandemic emergency call patterns finds that mental health and
       welfare-check calls remain elevated nationally.
       (<a href="https://www.vera.org/publications/what-policing-costs" target="_blank" class="inline-cite">Vera
@@ -269,24 +269,26 @@
 
     <h2 style="margin-top: 40px;">Which call types grew or fell the most — per 100,000 residents?</h2>
     <p class="section-text">
-      This chart shows the net change in call rate per 100,000 residents between 2020 and 2025,
-      fully adjusting for Seattle's population growth. Green bars indicate call types that
-      increased per resident; red bars show those that declined. Because population is held
-      constant, a category showing a green bar genuinely became more common — not just a
-      byproduct of more people living in the city.
+      The chart compares how common each call type was
+      in 2025 relative to 2020 after adjusting for Seattle's population growth. Green bars
+      indicate call categories that became more common per resident, while red bars indicate
+      categories that became less common. Assist Public and Assist Other Agency show the
+      largest increases, suggesting these calls occurred more frequently even after accounting
+      for population growth. Disturbance, Prowler, and Burglary experienced some of the
+      largest declines. The further a bar extends from zero, the larger the change in that
+      call category's per-resident rate.
     </p>
     <div class="chart-card">
       <div id="pop-adj-change-chart"></div>
     </div>
     <div class="callout">
-      <strong>So what?</strong> Sustained per-resident increases in certain call categories
-      are a signal, not just of more crime or disorder, but often of unmet need.
-      An uptick in welfare check calls per resident, for example, may reflect gaps in
-      mental health services rather than a spike in danger. Keep in mind that volume is not
-      severity: a handful of high-severity events do far more harm than thousands of
-      low-severity calls.
-      (<a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank"
-        class="inline-cite">Seattle Breaking</a>)
+      <strong>Context:</strong> Looking only at raw call totals can be misleading because
+      Seattle's population changed between 2020 and 2025. Standardizing by population helps
+      separate changes caused by city growth from changes in call behavior itself. While some
+      categories generated more calls overall, this chart shows whether they actually became
+      more or less common for the average resident. The results suggest that demand shifted
+      across call types rather than increasing uniformly across the entire emergency response
+      system.
     </div>
   </section>
 
@@ -314,8 +316,12 @@
 
     <h2 style="margin-top: 40px;">Some call types are much more urgent than others</h2>
     <p class="section-text">
-      This heatmap compares the top 10 event groups in 2025 by priority level.
-      Darker cells mean more calls in that event group and priority category. Hover over any cell for exact counts.
+      This heatmap compares the top 10 event groups in 2025 across Priority 1–5 calls. Each
+      priority level uses its own percentage-based color scale, meaning the shading is calculated
+      separately within that priority rather than across the entire heatmap. Darker cells
+      indicate a larger share of calls for that event group within that specific priority level.
+      Hover over any cell to see the exact count and percentage.
+
     </p>
     <div class="chart-card">
       <div id="event-priority-heatmap"></div>
@@ -439,46 +445,46 @@
     </div>
   </section>
 
- <!-- SECTION 6: CONCLUSION -->
-<section class="story-section">
-  <div class="section-label">
-    <span class="section-tag">Section 6: What Does It All Mean?</span>
-    <div class="section-rule"></div>
-  </div>
-
-  <h2>Seattle's emergency calls reveal a broader picture of community needs</h2>
-
-  <div class="intro-block" style="margin-top:0;">
-    <div class="so-what">
-      <span>Takeaway</span>
-      Seattle's 911 data shows that emergency demand is more complex than many people
-      assume. The largest call categories are not shootings or major crimes, but calls
-      related to disturbances, suspicious circumstances, public assistance, traffic
-      incidents, and wellness concerns. Looking across both 2020 and 2025 reveals that
-      emergency response is shaped by a wide range of community needs, many of which
-      extend beyond traditional crime response.
+  <!-- SECTION 6: CONCLUSION -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 6: What Does It All Mean?</span>
+      <div class="section-rule"></div>
     </div>
 
-    <p>
-      The data also shows that Seattle's emergency call patterns changed between 2020
-      and 2025. Some call categories became more common on a per-resident basis, while
-      others declined. Priority-level data suggests that lower-priority service requests
-      grew while the highest-priority calls became less common. At the same time, many
-      daily call rhythms remained remarkably consistent, with activity generally peaking
-      during the afternoon and evening hours.
-    </p>
+    <h2>Seattle's emergency calls reveal a broader picture of community needs</h2>
 
-    <p>
-      Together, these visualizations highlight how public data can provide a clearer
-      picture of what residents are experiencing and when they seek help. While 911 is
-      often associated with major emergencies, the data suggests that much of the system's
-      workload comes from everyday issues that affect quality of life, public safety, and
-      community well-being. Understanding these patterns can help residents, policymakers,
-      and emergency responders make more informed decisions about how resources are used
-      and where future needs may emerge.
-    </p>
-  </div>
-</section>
+    <div class="intro-block" style="margin-top:0;">
+      <div class="so-what">
+        <span>Takeaway</span>
+        Seattle's 911 data shows that emergency demand is more complex than many people
+        assume. The largest call categories are not shootings or major crimes, but calls
+        related to disturbances, suspicious circumstances, public assistance, traffic
+        incidents, and wellness concerns. Looking across both 2020 and 2025 reveals that
+        emergency response is shaped by a wide range of community needs, many of which
+        extend beyond traditional crime response.
+      </div>
+
+      <p>
+        The data also shows that Seattle's emergency call patterns changed between 2020
+        and 2025. Some call categories became more common on a per-resident basis, while
+        others declined. Priority-level data suggests that lower-priority service requests
+        grew while the highest-priority calls became less common. At the same time, many
+        daily call rhythms remained remarkably consistent, with activity generally peaking
+        during the afternoon and evening hours.
+      </p>
+
+      <p>
+        Together, these visualizations highlight how public data can provide a clearer
+        picture of what residents are experiencing and when they seek help. While 911 is
+        often associated with major emergencies, the data suggests that much of the system's
+        workload comes from everyday issues that affect quality of life, public safety, and
+        community well-being. Understanding these patterns can help residents, policymakers,
+        and emergency responders make more informed decisions about how resources are used
+        and where future needs may emerge.
+      </p>
+    </div>
+  </section>
 
   <div class="tooltip" id="tooltip"></div>
 

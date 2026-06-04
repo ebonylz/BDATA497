@@ -12,7 +12,7 @@
   <div class="top-bar"></div>
   <div class="gold-bar"></div>
 
-  <!-- ======= HEADER ======= -->
+  <!-- HEADER -->
   <header>
     <div class="label">Seattle Public Safety · Data Narrative</div>
     <h1>Seattle's Emergency Calls Tell a Bigger Story</h1>
@@ -28,7 +28,7 @@
     </div>
   </header>
 
-  <!-- ======= STAT ROW ======= -->
+  <!-- STAT ROW -->
   <div class="stat-row">
     <div class="stat-block">
       <span class="stat-number" id="stat-total-2020">—</span>
@@ -40,7 +40,7 @@
     </div>
     <div class="stat-block">
       <span class="stat-number" id="stat-top-cat">—</span>
-      <span class="stat-label">Top Call Type (2025)</span>
+      <span class="stat-label">Top Call Type (2020 and 2025)</span>
     </div>
     <div class="stat-block">
       <span class="stat-number">5</span>
@@ -48,12 +48,12 @@
     </div>
   </div>
 
-  <!-- ======= INTRO ======= -->
+  <!-- INTRO -->
   <div class="intro-block">
     <div class="so-what">
       <span>Why this matters</span>
       When most people think of 911, they picture violent crime. But Seattle's
-      call data tells a different story — one where mental health crises, welfare
+      call data tells a different story: mental health crises, welfare
       checks, and disturbances account for far more emergency responses than
       shootings or assaults. Understanding what people actually call 911 for is
       the first step toward building a public safety system that can actually meet
@@ -63,50 +63,148 @@
       In 2020, Seattle was at a flashpoint. The COVID-19 pandemic reshaped daily
       life, and the nationwide response to George Floyd's death brought urgent
       questions about what public safety should look like. Five years later, those
-      debates are still unresolved — but the data has continued to accumulate.
+      debates are still unresolved, but the data has continued to accumulate.
     </p>
     <p>
       This project explores 911 call records from both years to ask: what kinds
       of emergencies are people actually experiencing? Where do they happen? And
       how have those patterns changed? The data shows that emergency response in
-      Seattle is deeply tied to housing, healthcare access, and mental health —
-      not just policing.
+      Seattle is deeply tied to housing, healthcare access, and mental health, not just policing.
     </p>
   </div>
 
-  <!-- ======= SECTION 1: CALL DISTRIBUTION ======= -->
+  <!-- EXPLAINER: HOW 911 WORKS -->
   <section class="story-section">
     <div class="section-label">
-      <span class="section-tag">Section 1 — Call Distribution</span>
+      <span class="section-tag">Background: How 911 Works in Seattle</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Understanding Seattle's 911 System</h2>
+    <p class="section-text">
+      Before diving into the data, it helps to know how Seattle classifies and responds to emergency calls.
+    </p>
+
+    <div class="explainer-grid">
+
+      <div class="explainer-card priority-card">
+        <h3>When to Call 911</h3>
+        <p>Call 911 for any in-progress emergency or crime: an assault, medical emergency, fire, or gas leak. For non-urgent situations (a car prowl that happened overnight, noise complaints, parking issues), use the non-emergency line at 206-625-5011 or file a report online.</p>
+        <p class="explainer-cite">Source: <a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank">With CARE, Seattle.gov (2025)</a></p>
+      </div>
+
+      <div class="explainer-card priority-card">
+        <h3>How Calls Are Categorized</h3>
+        <p>What you see in the data is a "clearance description," not the initial 911 report. After an officer responds and assesses the situation, they assign a clearance code reflecting what they actually found. The same caller report can produce different codes depending on what was observed on arrival.</p>
+        <p class="explainer-cite">Source: <a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank">Seattle Breaking, SPD Call Types Explained (2026)</a></p>
+      </div>
+
+      <div class="explainer-card priority-card">
+        <div class="explainer-icon">🚨</div>
+        <h3>Call Priority Levels</h3>
+        <p>Every 911 call is assigned a priority based on how much risk it poses to public safety. Here is what each level means:</p>
+        <ul class="priority-list">
+          <li><strong class="priority-badge p1">Priority 1</strong> Critical incidents posing an immediate threat to human life or involving significant bodily harm (e.g., shootings, robberies, violent assaults).</li>
+          <li><strong class="priority-badge p2">Priority 2</strong> Active incidents that could escalate; crimes where enforcement is still possible; and most service requests from other agencies (e.g., shoplifts, property damage, active disturbances).</li>
+          <li><strong class="priority-badge p3">Priority 3</strong> Incidents that do not meet Priority 1 or 2 criteria but may require officer investigation or action (e.g., cold reports, follow-up checks).</li>
+          <li><strong class="priority-badge p4">Priority 4</strong> Non-critical service requests such as found property or parking complaints.</li>
+          <li><strong class="priority-badge p5">Priority 5</strong> Lowest-priority calls, typically administrative or informational in nature, such as requests for documentation or officer-generated activity with no immediate public safety need.</li>
+        </ul>
+        <p class="explainer-cite">Source: <a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank">With CARE, Seattle.gov (2025)</a></p>
+      </div>
+
+      <div class="explainer-card calltype-card">
+        <div class="explainer-icon">📖</div>
+        <h3>What the Call Types in This Data Mean</h3>
+        <p>The categories below are the exact event groups that appear in Seattle's 911 call data. Each is a clearance description assigned after an officer responds, not necessarily what the caller originally reported.
+        (<a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank" class="inline-cite">Seattle Breaking</a>)</p>
+        <div class="calltype-grid">
+          <div class="calltype-item">
+            <span class="calltype-name">Disturbance</span>
+            <span class="calltype-def">Situations that called for police but did not rise to a specific crime: verbal arguments, loud music, group disputes. Very common, often non-violent, and frequently resolved without arrest.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Suspicious Circumstances</span>
+            <span class="calltype-def">A resident called to report something they found suspicious: a parked vehicle, a person acting oddly, someone ringing doorbells. Does not mean officers found criminal activity. The vast majority resolve as no incident.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Assaults</span>
+            <span class="calltype-def">Physical attacks, ranging from minor altercations to aggravated assault involving weapons. Includes domestic violence assaults and non-domestic incidents.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Assist Public</span>
+            <span class="calltype-def">General requests for police assistance that do not fit a specific crime category, such as helping someone who is lost, locked out, or in need of a welfare check.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Traffic</span>
+            <span class="calltype-def">Collisions, DUIs, hit-and-runs, and other vehicle-related incidents. Includes both injury and non-injury crashes. Police and fire often respond to the same incident separately.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Prowler</span>
+            <span class="calltype-def">Reports of a person suspected of trespassing or lurking around a property with possible intent to commit a crime. Often difficult to verify and frequently resolved with no suspect found.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Assist Other Agency</span>
+            <span class="calltype-def">Calls where SPD provides backup or support to another agency, such as the fire department, King County, or Washington State Patrol.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Theft</span>
+            <span class="calltype-def">Stolen property, ranging from shoplifting to auto theft to bicycle theft. SPD distinguishes these sub-types because response patterns differ significantly.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Burglary</span>
+            <span class="calltype-def">Unauthorized entry into a building with intent to commit a crime, almost always theft. Includes both residential and commercial burglaries, and "cold" reports filed after the fact.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Automobiles</span>
+            <span class="calltype-def">Calls specifically related to vehicles: car prowls, auto theft follow-up, abandoned vehicles, or vehicle-related disturbances not classified under Traffic.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Property Destruction (Damage)</span>
+            <span class="calltype-def">Vandalism, graffiti, or damage to property. Often reported after the fact rather than in progress. Can be filed online in many cases.</span>
+          </div>
+          <div class="calltype-item">
+            <span class="calltype-name">Mischief &amp; Nuisance</span>
+            <span class="calltype-def">Low-level disruptive behavior that does not meet the threshold of a disturbance or specific crime: harassment, minor public disorder, or repeated nuisance activity.</span>
+          </div>
+        </div>
+        <p class="explainer-cite">Source: <a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank">Seattle Breaking, SPD Call Types Explained (2026)</a></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 1: CALL DISTRIBUTION -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 1: Call Distribution</span>
       <div class="section-rule"></div>
     </div>
     <h2>Medical and wellness-related calls make up a much larger portion of Seattle's emergency response than most people expect</h2>
     <p class="section-text">
-      The top 12 call categories in 2025 — ranked by volume. Hover over any bar
-      to see the exact count. Violent crime categories sit far down the list.
+      The top 12 call categories in 2025, ranked by volume. Hover over any bar to see the exact count. Violent crime categories sit far down the list.
     </p>
     <div class="chart-card">
       <div id="bar-chart"></div>
     </div>
     <div class="callout">
-      <strong>So what?</strong> The categories dominating Seattle's 911 log —
-      suspicious circumstances, disturbances, welfare checks — are situations
+      <strong>So what?</strong> The categories dominating Seattle's 911 log:
+      suspicious circumstances, disturbances, and welfare checks are situations
       where a police response may not always be the best fit. Cities that have
       added mental health co-responders and community navigators to their
       emergency systems have seen reduced repeat calls for these same categories.
     </div>
   </section>
 
-  <!-- ======= SECTION 2: 2020 VS 2025 COMPARE ======= -->
+  <!-- SECTION 2: 2020 VS 2025 COMPARE -->
   <section class="story-section">
     <div class="section-label">
-      <span class="section-tag">Section 2 — How Calls Changed After 2020</span>
+      <span class="section-tag">Section 2: How Calls Changed After 2020</span>
       <div class="section-rule"></div>
     </div>
     <h2>Emergency call patterns shifted during and after COVID-19</h2>
     <p class="section-text">
       Each row shows the same call category in 2020 (gold dot) and 2025 (purple dot).
-      A line connects the two — movement to the right means more calls; left means fewer.
+      A line connects the two: movement to the right means more calls; left means fewer.
       Hover to compare exact values.
     </p>
     <div class="chart-card">
@@ -118,19 +216,67 @@
     </div>
     <div class="callout">
       <strong>Context:</strong> The pandemic years brought major shifts in how
-      people interacted with emergency services — lockdowns, economic stress, and
+      people interacted with emergency services. Lockdowns, economic stress, and
       disrupted mental health care all affected call volumes. Some of those shifts
       have persisted well into 2025.
     </div>
+
+    <h2 style="margin-top: 40px;">Adjusting for population growth: calls per 100,000 residents</h2>
+    <p class="section-text">
+      Raw call counts do not account for Seattle's growing population. This chart shows
+      the same comparison standardized per 100,000 residents, giving a more accurate
+      picture of how demand has actually changed.
+    </p>
+    <div class="chart-card">
+      <div class="legend">
+        <span><span class="legend-dot dot-2020"></span>2020</span>
+        <span><span class="legend-dot dot-2025"></span>2025</span>
+      </div>
+      <div id="standardized-chart"></div>
+    </div>
   </section>
 
-  <!-- ======= SECTION 3: BIGGEST CHANGES ======= -->
+  <!-- PRIORITY CHARTS -->
   <section class="story-section">
     <div class="section-label">
-      <span class="section-tag">Section 3 — Biggest Changes Since 2020</span>
+      <span class="section-tag">Section 3: Priority Levels</span>
       <div class="section-rule"></div>
     </div>
-    <h2>Some call types grew significantly — others dropped. The changes point to real shifts in community need.</h2>
+
+    <h2>Priority 1 through 5 calls per resident show how urgent Seattle's 911 demand is</h2>
+    <p class="section-text">
+      This chart standardizes 911 calls by population, showing priority call rates per 100,000 residents instead of raw counts. Recall: Priority 1 = immediate life threat; Priority 4 = non-critical service requests.
+      (<a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank" class="inline-cite">With CARE, Seattle.gov</a>)
+    </p>
+    <div class="chart-card">
+      <div class="legend">
+        <span><span class="legend-dot dot-2020"></span>2020</span>
+        <span><span class="legend-dot dot-2025"></span>2025</span>
+      </div>
+      <div id="priority-rate-chart"></div>
+    </div>
+
+    <h2 style="margin-top: 40px;">Some call types are much more urgent than others</h2>
+    <p class="section-text">
+      This heatmap compares the top 10 event groups in 2025 by priority level.
+      Darker cells mean more calls in that event group and priority category. Hover over any cell for exact counts.
+    </p>
+    <div class="chart-card">
+      <div id="event-priority-heatmap"></div>
+    </div>
+    <div class="callout">
+      <strong>Reading this chart:</strong> Priority 1 calls include shootings, robberies, and violent assaults. Priority 2 covers shoplifts, property damage, and active disturbances. Priorities 3 and 4 involve lower-level incidents that are stressful but not immediate life-safety risks, such as noise and parking complaints.
+      (<a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank" class="inline-cite">With CARE, Seattle.gov</a>)
+    </div>
+  </section>
+
+  <!-- SECTION 4: BIGGEST CHANGES -->
+  <section class="story-section">
+    <div class="section-label">
+      <span class="section-tag">Section 4: Biggest Changes Since 2020</span>
+      <div class="section-rule"></div>
+    </div>
+    <h2>Some call types grew significantly, others dropped. The changes point to real shifts in community need.</h2>
     <p class="section-text">
       Green bars show call types that increased from 2020 to 2025; red bars show
       those that decreased. The length of each bar shows the size of the change.
@@ -140,36 +286,51 @@
     </div>
     <div class="callout">
       <strong>So what?</strong> Sustained increases in certain call categories
-      are a signal — not just of more crime or disorder, but often of unmet need.
+      are a signal, not just of more crime or disorder, but often of unmet need.
       An uptick in welfare check calls, for example, may reflect gaps in mental
-      health services rather than a spike in danger.
+      health services rather than a spike in danger. Keep in mind that volume is not severity: a handful of high-severity events do far more harm than thousands of low-severity calls.
+      (<a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank" class="inline-cite">Seattle Breaking</a>)
     </div>
   </section>
 
-  <!-- ======= SECTION 4: TIME OF DAY ======= -->
+  <!-- SECTION 5: TIME OF DAY -->
   <section class="story-section">
     <div class="section-label">
-      <span class="section-tag">Section 4 — When Are People Calling?</span>
+      <span class="section-tag">Section 5: When Are People Calling?</span>
       <div class="section-rule"></div>
     </div>
     <h2>Afternoon and evening hours consistently drive the highest call volume in both years</h2>
     <p class="section-text">
       Calls are grouped into three eight-hour shifts matching typical police patrol
-      scheduling. The 2PM–10PM window is the busiest in both 2020 and 2025.
+      scheduling. The 2PM to 10PM window is the busiest in both 2020 and 2025.
+    </p>
+    <h2>Calls per 100,000 residents by shift</h2>
+    <p class="section-text">
+      Standardized by population to account for Seattle's growth between 2020 and 2025. Emergency responses may be delayed during peak hours due to availability of police resources.
+      (<a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank" class="inline-cite">With CARE, Seattle.gov</a>)
     </p>
     <div class="chart-card">
       <div class="legend">
         <span><span class="legend-dot dot-2020"></span>2020</span>
         <span><span class="legend-dot dot-2025"></span>2025</span>
       </div>
-      <div id="shift-chart"></div>
+      <div id="standardized-shift-chart"></div>
+    </div>
+
+    <h2 style="margin-top: 40px;">When Does Seattle Call 911? Hour by hour</h2>
+    <p class="section-text">
+      Looking at calls by hour reveals patterns hidden when calls are grouped into broad shifts.
+      Darker cells indicate higher call volumes per 100,000 residents.
+    </p>
+    <div class="chart-card">
+      <div id="hour-heatmap"></div>
     </div>
   </section>
 
-  <!-- ======= SECTION 5: PRECINCT ======= -->
+  <!-- SECTION 6: PRECINCT -->
   <section class="story-section">
     <div class="section-label">
-      <span class="section-tag">Section 5 — Different Neighborhoods, Different Emergencies</span>
+      <span class="section-tag">Section 6: Different Neighborhoods, Different Emergencies</span>
       <div class="section-rule"></div>
     </div>
     <h2>Different Seattle precincts experience very different emergency response demand</h2>
@@ -182,53 +343,59 @@
         >
         <figcaption>SPD precinct boundaries. &copy; Seattle Times / SPD.</figcaption>
       </figure>
-      <div class="precinct-text">
-        <p>Seattle's five precincts — North, East, South, West, and Southwest —
-        each cover distinct neighborhoods with different demographics, housing
-        conditions, and access to community resources. Emergency response demand
-        is not spread evenly across the city.</p>
-        <p>Population density, healthcare access, housing stability, and the
-        presence (or absence) of social services all shape how often and why
-        residents call 911. The West Precinct, which covers downtown and
-        surrounding areas, has historically handled a high share of
-        crisis-related calls.</p>
-        <p>Comparing how each precinct's call volume changed between 2020 and
-        2025 helps show where community needs may be growing — and where
-        investment in non-police support services might make the biggest difference.</p>
-      </div>
-    </div>
 
-    <div class="chart-card">
-      <div class="legend">
-        <span><span class="legend-dot dot-2020"></span>2020</span>
-        <span><span class="legend-dot dot-2025"></span>2025</span>
+      <div class="precinct-chart-and-text">
+        <div class="precinct-text">
+          <p>Seattle's five precincts: North, East, South, West, and Southwest
+          each cover distinct neighborhoods with different demographics, housing
+          conditions, and access to community resources. Emergency response demand
+          is not spread evenly across the city.</p>
+          <p>Population density, healthcare access, housing stability, and the
+          presence or absence of social services all shape how often and why
+          residents call 911. The West Precinct, which covers downtown and
+          surrounding areas, has historically handled a high share of
+          crisis-related calls.</p>
+          <p>Comparing how each precinct's call volume changed between 2020 and
+          2025 helps show where community needs may be growing, and where
+          investment in non-police support services might make the biggest difference.</p>
+        </div>
+        <div class="chart-card precinct-chart-card">
+          <div class="legend">
+            <span><span class="legend-dot dot-2020"></span>2020</span>
+            <span><span class="legend-dot dot-2025"></span>2025</span>
+          </div>
+          <div id="precinct-chart"></div>
+        </div>
       </div>
-      <div id="precinct-chart"></div>
     </div>
   </section>
 
-  <!-- ======= CONCLUSION ======= -->
+  <!-- CONCLUSION -->
   <div class="intro-block" style="margin-top:0;">
     <div class="so-what">
       <span>Takeaway</span>
       Seattle's 911 data makes one thing clear: public safety is about much more
       than policing alone. The calls coming in every day reflect a city navigating
-      overlapping crises — housing, mental health, substance use, and poverty. A
+      overlapping crises in housing, mental health, substance use, and poverty. A
       public safety system built only around a police response will keep getting
-      called to situations it wasn't designed to handle.
+      called to situations it was not designed to handle.
     </div>
     <p>
       The data also shows that these patterns are not static. COVID-19 shifted
       call volumes in ways that have not fully reversed. As Seattle continues to
       debate how to staff and fund emergency response, this call log is one of
-      the clearest records of what communities actually need help with — and how
+      the clearest records of what communities actually need help with, and how
       that need changes over time.
+    </p>
+    <p>
+      For residents, this data also has a practical takeaway: knowing when to call 911, when to use the non-emergency line, and what happens after a call is placed can help the system work better for everyone. The majority of 911 calls are answered within 15 seconds, but response times for police depend heavily on call priority and available resources.
+      (<a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank" class="inline-cite">With CARE, Seattle.gov</a>)
     </p>
   </div>
 
   <div class="tooltip" id="tooltip"></div>
 
-  <!-- ======= FOOTER / REFERENCES ======= -->
+  <!-- FOOTER / REFERENCES -->
   <footer>
     <div class="footer-inner">
       <h3>References &amp; Data Sources</h3>
@@ -244,6 +411,16 @@
           Seattle, WA: City of Seattle.
           <a href="https://data.seattle.gov/Public-Safety/Call-Data/33kz-ixgy" target="_blank">data.seattle.gov</a>.
           Filtered to Call Type = "911," sorted by Event Arrived Time. Accessed 2025.
+        </li>
+        <li>
+          Spangenthal-Lee, Jonah. "Your Guide to Calling 9-1-1 in Seattle." <em>With CARE</em>, City of Seattle Community Assisted Response and Engagement. October 8, 2025.
+          <a href="https://withcare.seattle.gov/2025/10/08/your-guide-to-calling-9-1-1-in-seattle/" target="_blank">withcare.seattle.gov</a>.
+          Referenced for 911 call priority definitions and caller guidance.
+        </li>
+        <li>
+          Seattle Breaking. "Reading Seattle Police Department Call Types: A Civilian's Glossary." April 26, 2026.
+          <a href="https://www.seattlebreaking.com/articles/spd-call-types-explained" target="_blank">seattlebreaking.com</a>.
+          Referenced for definitions of SPD clearance categories and call type explanations.
         </li>
         <li>
           Bostock, Mike, et al. <em>D3.js — Data-Driven Documents</em>, version 7.
@@ -283,7 +460,7 @@
       </ol>
       <p class="footer-note">
         All datasets are public data from the Seattle Open Data Portal and are included in the
-        project GitHub repository. Visualizations built with D3.js v7 only — no additional
+        project GitHub repository. Visualizations built with D3.js v7 only; no additional
         charting libraries used. Typography and color follow the official UW Brand Guidelines.
         Data covers calendar year 2020 and 2025 records, filtered to 911 call type only.
       </p>

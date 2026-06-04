@@ -8,7 +8,6 @@
 //   2. Dumbbell        — 2020 vs 2025 compare
 //   3. Diverging bar   — biggest changes
 //   4. Grouped bar     — calls by shift/time of day
-//   5. Dumbbell        — calls by precinct
 //
 // Colors from UW Brand Guidelines:
 //   Spirit Purple  #4b2e83
@@ -56,15 +55,13 @@ Promise.all([
   d3.select("#stat-top-cat").text(counts2025[0]?.eventGroup ?? "—");
 
   drawBarChart(counts2025);
-  drawCompareChart(counts2020, counts2025);
   drawStandardizedChart(counts2020, counts2025, populationData);
-  drawChangeChart(counts2020, counts2025);
-  drawShiftChart(data2020, data2025);
-  drawStandardizedShiftChart(data2020, data2025, populationData);
-  drawPrecinctChart(data2020, data2025);
-  drawHourHeatmap(data2020, data2025, populationData);
+  drawPopAdjChangeChart(counts2020, counts2025, populationData);
   drawPriorityRateChart(data2020, data2025, populationData);
   drawEventPriorityHeatmap(data2025);
+  drawHourHeatmap(data2020, data2025, populationData);
+  drawHourByCallTypeChart(data2025);
+  drawHourByCallTypeChart2020(data2020);
 });
 
 
@@ -155,99 +152,6 @@ function drawBarChart(data) {
     .call(gg => gg.select(".domain").remove());
 }
 
-
-// ========================================
-// CHART 2 — DUMBBELL 2020 VS 2025
-// ========================================
-
-function drawCompareChart(data2020, data2025) {
-  const map2020 = new Map(data2020.map(d => [d.eventGroup, d.count]));
-  const map2025 = new Map(data2025.map(d => [d.eventGroup, d.count]));
-
-  // Use top 12 from 2025
-  const categories = data2025.slice(0, 12).map(d => d.eventGroup);
-  const compareData = categories.map(group => ({
-    eventGroup: group,
-    count2020: map2020.get(group) || 0,
-    count2025: map2025.get(group) || 0
-  }));
-
-  const margin = { top: 12, right: 80, bottom: 44, left: 240 };
-  const width = 860 - margin.left - margin.right;
-  const height = 480 - margin.top - margin.bottom;
-
-  const svg = d3.select("#compare-chart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);
-
-  const g = svg.append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-  const maxVal = d3.max(compareData, d => Math.max(d.count2020, d.count2025));
-  const x = d3.scaleLinear().domain([0, maxVal * 1.1]).range([0, width]);
-  const y = d3.scaleBand()
-    .domain(compareData.map(d => d.eventGroup))
-    .range([0, height]).padding(0.3);
-
-  // Grid
-  g.append("g").attr("class", "grid")
-    .call(d3.axisBottom(x).ticks(5).tickSize(height).tickFormat(""))
-    .call(gg => gg.select(".domain").remove());
-
-  // Connector lines
-  g.selectAll(".connector")
-    .data(compareData)
-    .join("line")
-    .attr("x1", d => x(d.count2020))
-    .attr("x2", d => x(d.count2025))
-    .attr("y1", d => y(d.eventGroup) + y.bandwidth() / 2)
-    .attr("y2", d => y(d.eventGroup) + y.bandwidth() / 2)
-    .attr("stroke", "#ccc")
-    .attr("stroke-width", 2);
-
-  // 2020 dots (Husky Gold)
-  g.selectAll(".dot-2020")
-    .data(compareData)
-    .join("circle")
-    .attr("cx", d => x(d.count2020))
-    .attr("cy", d => y(d.eventGroup) + y.bandwidth() / 2)
-    .attr("r", 7)
-    .attr("fill", UW_GOLD)
-    .attr("stroke", "white").attr("stroke-width", 1.5)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>2020: ${d3.format(",")(d.count2020)} calls`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>2020: ${d3.format(",")(d.count2020)} calls`, event))
-    .on("mouseout", hideTip);
-
-  // 2025 dots (Spirit Purple)
-  g.selectAll(".dot-2025")
-    .data(compareData)
-    .join("circle")
-    .attr("cx", d => x(d.count2025))
-    .attr("cy", d => y(d.eventGroup) + y.bandwidth() / 2)
-    .attr("r", 7)
-    .attr("fill", UW_PURPLE)
-    .attr("stroke", "white").attr("stroke-width", 1.5)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>2025: ${d3.format(",")(d.count2025)} calls`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>2025: ${d3.format(",")(d.count2025)} calls`, event))
-    .on("mouseout", hideTip);
-
-  // Y axis
-  g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(y).tickSize(0))
-    .call(gg => gg.select(".domain").remove())
-    .selectAll("text").attr("dx", "-8");
-
-  // X axis
-  g.append("g").attr("class", "axis")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format(",")))
-    .call(gg => gg.select(".domain").remove());
-}
 
 // ========================================
 // CHART 2B — STANDARDIZED CALL RATE BY RESIDENTS
@@ -351,10 +255,14 @@ function drawStandardizedChart(data2020, data2025, populationData) {
 }
 
 // ========================================
-// CHART 3 — DIVERGING CHANGE BAR
+// CHART 2C — POPULATION-ADJUSTED CHANGE BAR
+// Net change in rate per 100,000 residents
 // ========================================
 
-function drawChangeChart(data2020, data2025) {
+function drawPopAdjChangeChart(data2020, data2025, populationData) {
+  const pop2020 = +populationData.find(d => +d.Year === 2020).Population;
+  const pop2025 = +populationData.find(d => +d.Year === 2025).Population;
+
   const map2020 = new Map(data2020.map(d => [d.eventGroup, d.count]));
   const map2025 = new Map(data2025.map(d => [d.eventGroup, d.count]));
 
@@ -363,22 +271,23 @@ function drawChangeChart(data2020, data2025) {
     ...data2025.map(d => d.eventGroup)
   ]));
 
-  // Calculate net change, take top 14 by absolute size
+  // Calculate change in rate per 100k
   const changeData = allGroups
-    .map(group => ({
-      eventGroup: group,
-      change: (map2025.get(group) || 0) - (map2020.get(group) || 0)
-    }))
-    .filter(d => Math.abs(d.change) > 0)
-    .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
+    .map(group => {
+      const rate2020 = ((map2020.get(group) || 0) / pop2020) * 100000;
+      const rate2025 = ((map2025.get(group) || 0) / pop2025) * 100000;
+      return { eventGroup: group, rateChange: rate2025 - rate2020, rate2020, rate2025 };
+    })
+    .filter(d => Math.abs(d.rateChange) > 0.5)
+    .sort((a, b) => Math.abs(b.rateChange) - Math.abs(a.rateChange))
     .slice(0, 14)
-    .sort((a, b) => b.change - a.change);
+    .sort((a, b) => b.rateChange - a.rateChange);
 
-  const margin = { top: 12, right: 100, bottom: 44, left: 240 };
+  const margin = { top: 12, right: 110, bottom: 54, left: 240 };
   const width = 860 - margin.left - margin.right;
   const height = 520 - margin.top - margin.bottom;
 
-  const svg = d3.select("#change-chart")
+  const svg = d3.select("#pop-adj-change-chart")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
@@ -386,8 +295,8 @@ function drawChangeChart(data2020, data2025) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const ext = d3.max(changeData, d => Math.abs(d.change));
-  const x = d3.scaleLinear().domain([-ext * 1.1, ext * 1.1]).range([0, width]);
+  const ext = d3.max(changeData, d => Math.abs(d.rateChange));
+  const x = d3.scaleLinear().domain([-ext * 1.15, ext * 1.15]).range([0, width]);
   const y = d3.scaleBand()
     .domain(changeData.map(d => d.eventGroup))
     .range([0, height]).padding(0.25);
@@ -399,37 +308,55 @@ function drawChangeChart(data2020, data2025) {
     .attr("stroke", "#999").attr("stroke-width", 1.5);
 
   // Bars
-  g.selectAll(".change-bar")
+  g.selectAll(".popadj-bar")
     .data(changeData)
     .join("rect")
-    .attr("x", d => d.change >= 0 ? x(0) : x(d.change))
+    .attr("x", d => d.rateChange >= 0 ? x(0) : x(d.rateChange))
     .attr("y", d => y(d.eventGroup))
-    .attr("width", d => Math.abs(x(d.change) - x(0)))
+    .attr("width", d => Math.abs(x(d.rateChange) - x(0)))
     .attr("height", y.bandwidth())
-    .attr("fill", d => d.change >= 0 ? C_POSITIVE : C_NEGATIVE)
+    .attr("fill", d => d.rateChange >= 0 ? C_POSITIVE : C_NEGATIVE)
     .attr("opacity", 0.88)
     .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>Net change: ${d3.format("+,")(d.change)}`, event))
+      showTip(
+        `<strong>${d.eventGroup}</strong><br>` +
+        `Change: ${d.rateChange >= 0 ? "+" : ""}${d.rateChange.toFixed(1)} per 100k<br>` +
+        `2020: ${d.rate2020.toFixed(1)} / 2025: ${d.rate2025.toFixed(1)}`,
+        event
+      ))
     .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.eventGroup}</strong><br>Net change: ${d3.format("+,")(d.change)}`, event))
+      showTip(
+        `<strong>${d.eventGroup}</strong><br>` +
+        `Change: ${d.rateChange >= 0 ? "+" : ""}${d.rateChange.toFixed(1)} per 100k<br>` +
+        `2020: ${d.rate2020.toFixed(1)} / 2025: ${d.rate2025.toFixed(1)}`,
+        event
+      ))
     .on("mouseout", hideTip);
 
   // Value labels
-  g.selectAll(".change-label")
+  g.selectAll(".popadj-label")
     .data(changeData)
     .join("text")
     .attr("class", "label")
-    .attr("x", d => d.change >= 0 ? x(d.change) + 5 : x(d.change) - 5)
+    .attr("x", d => d.rateChange >= 0 ? x(d.rateChange) + 5 : x(d.rateChange) - 5)
     .attr("y", d => y(d.eventGroup) + y.bandwidth() / 2 + 4)
-    .attr("text-anchor", d => d.change >= 0 ? "start" : "end")
-    .text(d => d3.format("+,")(d.change));
+    .attr("text-anchor", d => d.rateChange >= 0 ? "start" : "end")
+    .text(d => `${d.rateChange >= 0 ? "+" : ""}${d.rateChange.toFixed(1)}`);
 
   // Legend
-  const legend = g.append("g").attr("transform", `translate(${width - 170}, -10)`);
+  const legend = g.append("g").attr("transform", `translate(${width - 200}, -10)`);
   legend.append("rect").attr("width", 12).attr("height", 12).attr("fill", C_POSITIVE);
-  legend.append("text").attr("class", "label").attr("x", 16).attr("y", 11).text("Increased");
-  legend.append("rect").attr("x", 90).attr("width", 12).attr("height", 12).attr("fill", C_NEGATIVE);
-  legend.append("text").attr("class", "label").attr("x", 106).attr("y", 11).text("Decreased");
+  legend.append("text").attr("class", "label").attr("x", 16).attr("y", 11).text("Higher rate per 100k");
+  legend.append("rect").attr("x", 150).attr("width", 12).attr("height", 12).attr("fill", C_NEGATIVE);
+  legend.append("text").attr("class", "label").attr("x", 166).attr("y", 11).text("Lower rate");
+
+  // X axis label
+  g.append("text")
+    .attr("class", "label")
+    .attr("x", width / 2)
+    .attr("y", height + 44)
+    .attr("text-anchor", "middle")
+    .text("Change in calls per 100,000 residents (2020 → 2025)");
 
   // Y axis
   g.append("g").attr("class", "axis")
@@ -440,51 +367,57 @@ function drawChangeChart(data2020, data2025) {
   // X axis
   g.append("g").attr("class", "axis")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x).ticks(6).tickFormat(d3.format(",")))
+    .call(d3.axisBottom(x).ticks(6).tickFormat(d => (d >= 0 ? "+" : "") + d.toFixed(0)))
     .call(gg => gg.select(".domain").remove());
 }
 
 
 // ========================================
-// CHART 4 — GROUPED BAR BY SHIFT
+// CHART 4 — HOUR BY CALL TYPE (Interactive)
+// Line chart showing 2025 calls by hour,
+// with dropdown to filter by event group
 // ========================================
 
-function drawShiftChart(data2020, data2025) {
+function drawHourByCallTypeChart(data2025) {
   const parseTime = d3.timeParse("%Y %b %d %I:%M:%S %p");
 
-  // Assigns each call row to a shift based on arrival hour
-  function assignShift(d) {
-    const t = parseTime(d["CAD Event Arrived Time"]);
-    if (!t) return null;
-    const h = t.getHours();
-    if (h >= 6 && h < 14) return "6AM–2PM";
-    if (h >= 14 && h < 22) return "2PM–10PM";
-    return "10PM–6AM";
-  }
+  // Parse hours from data
+  const parsed = data2025.map(d => ({
+    hour: (() => { const t = parseTime(d["CAD Event Arrived Time"]); return t ? t.getHours() : null; })(),
+    eventGroup: d["Event Group"]?.trim() || ""
+  })).filter(d => d.hour !== null && d.eventGroup);
 
-  function shiftCounts(data) {
-    return d3.rollup(
-      data.map(d => ({ ...d, shift: assignShift(d) })).filter(d => d.shift),
-      v => v.length,
-      d => d.shift
-    );
-  }
+  // Get top 10 event groups
+  const topGroups = Array.from(
+    d3.rollup(parsed, v => v.length, d => d.eventGroup),
+    ([group, count]) => ({ group, count })
+  ).sort((a, b) => b.count - a.count).slice(0, 10).map(d => d.group);
 
-  const c2020 = shiftCounts(data2020);
-  const c2025 = shiftCounts(data2025);
-  const shiftOrder = ["6AM–2PM", "2PM–10PM", "10PM–6AM"];
+  // Build hour counts for ALL calls
+  const allHourMap = new Map();
+  d3.range(24).forEach(h => allHourMap.set(h, 0));
+  parsed.forEach(d => allHourMap.set(d.hour, (allHourMap.get(d.hour) || 0) + 1));
 
-  const shiftData = shiftOrder.map(s => ({
-    shift: s,
-    count2020: c2020.get(s) || 0,
-    count2025: c2025.get(s) || 0
-  }));
+  // Build hour counts per event group
+  const groupHourMap = new Map(); // group -> Map(hour -> count)
+  topGroups.forEach(g => {
+    const hmap = new Map();
+    d3.range(24).forEach(h => hmap.set(h, 0));
+    parsed.filter(d => d.eventGroup === g).forEach(d => hmap.set(d.hour, (hmap.get(d.hour) || 0) + 1));
+    groupHourMap.set(g, hmap);
+  });
 
-  const margin = { top: 24, right: 40, bottom: 52, left: 80 };
-  const width = 740 - margin.left - margin.right;
-  const height = 380 - margin.top - margin.bottom;
+  // Populate the select dropdown
+  const sel = d3.select("#calltype-select");
+  topGroups.forEach(g => {
+    sel.append("option").attr("value", g).text(g);
+  });
 
-  const svg = d3.select("#shift-chart")
+  const margin = { top: 20, right: 30, bottom: 60, left: 70 };
+  const width = 900 - margin.left - margin.right;
+  const height = 320 - margin.top - margin.bottom;
+
+  const svg = d3.select("#hour-calltype-chart")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
@@ -492,112 +425,195 @@ function drawShiftChart(data2020, data2025) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x0 = d3.scaleBand().domain(shiftOrder).range([0, width]).padding(0.28);
-  const x1 = d3.scaleBand().domain(["2020", "2025"]).range([0, x0.bandwidth()]).padding(0.1);
-  const maxY = d3.max(shiftData, d => Math.max(d.count2020, d.count2025));
-  const y = d3.scaleLinear().domain([0, maxY * 1.12]).range([height, 0]);
+  const hours = d3.range(24);
+  const x = d3.scaleLinear().domain([0, 23]).range([0, width]);
+  const y = d3.scaleLinear().range([height, 0]);
 
-  // Horizontal grid
-  g.append("g").attr("class", "grid")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(""))
-    .call(gg => gg.select(".domain").remove());
+  // Grid lines
+  const yGrid = g.append("g").attr("class", "grid");
 
-  // Grouped bars
-  const groups = g.selectAll(".grp")
-    .data(shiftData)
-    .join("g")
-    .attr("transform", d => `translate(${x0(d.shift)},0)`);
+  // Area + line generators
+  const area = d3.area()
+    .x(d => x(d.hour))
+    .y0(height)
+    .y1(d => y(d.count))
+    .curve(d3.curveCatmullRom.alpha(0.5));
 
-  groups.selectAll("rect")
-    .data(d => [
-      { year: "2020", count: d.count2020, shift: d.shift },
-      { year: "2025", count: d.count2025, shift: d.shift }
-    ])
-    .join("rect")
-    .attr("x", d => x1(d.year))
-    .attr("y", d => y(d.count))
-    .attr("width", x1.bandwidth())
-    .attr("height", d => height - y(d.count))
-    .attr("fill", d => d.year === "2020" ? UW_GOLD : UW_PURPLE)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.shift} — ${d.year}</strong><br>${d3.format(",")(d.count)} calls`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.shift} — ${d.year}</strong><br>${d3.format(",")(d.count)} calls`, event))
-    .on("mouseout", hideTip);
+  const line = d3.line()
+    .x(d => x(d.hour))
+    .y(d => y(d.count))
+    .curve(d3.curveCatmullRom.alpha(0.5));
 
-  // Count labels above bars
-  groups.selectAll(".top-label")
-    .data(d => [
-      { year: "2020", count: d.count2020 },
-      { year: "2025", count: d.count2025 }
-    ])
-    .join("text")
-    .attr("class", "label")
-    .attr("x", d => x1(d.year) + x1.bandwidth() / 2)
-    .attr("y", d => y(d.count) - 5)
-    .attr("text-anchor", "middle")
-    .text(d => d3.format(",")(d.count));
+  // Area path (filled)
+  const areaPath = g.append("path")
+    .attr("fill", UW_PURPLE)
+    .attr("fill-opacity", 0.12);
 
-  // Axes
-  g.append("g").attr("class", "axis")
+  // Line path
+  const linePath = g.append("path")
+    .attr("fill", "none")
+    .attr("stroke", UW_PURPLE)
+    .attr("stroke-width", 2.5);
+
+  // Dots for hover
+  const dots = g.append("g");
+
+  // X axis
+  const xAxis = g.append("g")
+    .attr("class", "axis")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x0).tickSize(0))
-    .call(gg => gg.select(".domain").remove())
-    .selectAll("text").style("font-size", "13px");
-
-  g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(",")))
+    .call(
+      d3.axisBottom(x)
+        .ticks(24)
+        .tickValues(d3.range(24))
+        .tickFormat(h => formatHour(h))
+    )
     .call(gg => gg.select(".domain").remove());
+
+  xAxis.selectAll("text")
+    .style("font-size", "10px")
+    .attr("transform", "rotate(-45)")
+    .attr("text-anchor", "end")
+    .attr("dy", "0.35em");
+
+  // X axis label
+  g.append("text")
+    .attr("class", "label")
+    .attr("x", width / 2)
+    .attr("y", height + 56)
+    .attr("text-anchor", "middle")
+    .text("Hour of day (2025)");
+
+  // Y axis group
+  const yAxisG = g.append("g").attr("class", "axis");
+
+  // Y axis label
+  const yLabel = g.append("text")
+    .attr("class", "label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -55)
+    .attr("text-anchor", "middle")
+    .text("Number of calls");
+
+  // Peak label
+  const peakLabel = g.append("text")
+    .attr("class", "label")
+    .attr("fill", UW_PURPLE)
+    .attr("font-weight", "700")
+    .attr("font-size", "11px");
+
+  function updateChart(groupKey) {
+    const hourMap = groupKey === "ALL" ? allHourMap : groupHourMap.get(groupKey);
+    const chartData = hours.map(h => ({ hour: h, count: hourMap.get(h) || 0 }));
+
+    const total = d3.sum(chartData, d => d.count);
+    d3.select("#calltype-total").text(`${d3.format(",")(total)} total calls in 2025`);
+
+    const maxY = d3.max(chartData, d => d.count);
+    y.domain([0, maxY * 1.18]);
+
+    yGrid.call(
+      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat("")
+    ).call(gg => gg.select(".domain").remove())
+     .selectAll(".tick line").attr("stroke", "#f0eee9");
+
+    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(","))).call(gg => gg.select(".domain").remove());
+
+    areaPath.datum(chartData).transition().duration(400).attr("d", area);
+    linePath.datum(chartData).transition().duration(400).attr("d", line);
+
+    // Peak annotation
+    const peak = chartData.reduce((a, b) => b.count > a.count ? b : a);
+    peakLabel
+      .attr("x", x(peak.hour))
+      .attr("y", y(peak.count) - 10)
+      .attr("text-anchor", peak.hour > 18 ? "end" : "middle")
+      .text(`Peak: ${formatHour(peak.hour)} (${d3.format(",")(peak.count)})`);
+
+    // Dots
+    const dotSel = dots.selectAll("circle").data(chartData);
+    dotSel.enter().append("circle")
+      .attr("r", 4)
+      .attr("fill", UW_PURPLE)
+      .attr("stroke", "white")
+      .attr("stroke-width", 1.5)
+      .style("cursor", "pointer")
+      .on("mouseover", (event, d) =>
+        showTip(
+          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
+          event
+        ))
+      .on("mousemove", (event, d) =>
+        showTip(
+          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
+          event
+        ))
+      .on("mouseout", hideTip)
+      .merge(dotSel)
+      .transition().duration(400)
+      .attr("cx", d => x(d.hour))
+      .attr("cy", d => y(d.count));
+
+    dotSel.exit().remove();
+  }
+
+  // Initial render
+  updateChart("ALL");
+
+  // Dropdown listener
+  sel.on("change", function() {
+    updateChart(this.value);
+  });
 }
 
+
 // ========================================
-// CHART 4B — STANDARDIZED SHIFT CHART
-// Calls per 100,000 residents
+// CHART 4B — HOUR BY CALL TYPE (2020 version)
+// Same chart as above but uses 2020 data and gold color
 // ========================================
 
-function drawStandardizedShiftChart(data2020, data2025, populationData) {
+function drawHourByCallTypeChart2020(data2020) {
   const parseTime = d3.timeParse("%Y %b %d %I:%M:%S %p");
 
-  const pop2020 = +populationData.find(d => +d.Year === 2020).Population;
-  const pop2025 = +populationData.find(d => +d.Year === 2025).Population;
+  const parsed = data2020.map(d => ({
+    hour: (() => { const t = parseTime(d["CAD Event Arrived Time"]); return t ? t.getHours() : null; })(),
+    eventGroup: d["Event Group"]?.trim() || ""
+  })).filter(d => d.hour !== null && d.eventGroup);
 
-  function assignShift(d) {
-    const t = parseTime(d["CAD Event Arrived Time"]);
-    if (!t) return null;
+  // Top 10 event groups from 2020 data
+  const topGroups = Array.from(
+    d3.rollup(parsed, v => v.length, d => d.eventGroup),
+    ([group, count]) => ({ group, count })
+  ).sort((a, b) => b.count - a.count).slice(0, 10).map(d => d.group);
 
-    const h = t.getHours();
+  // All-calls hour map
+  const allHourMap = new Map();
+  d3.range(24).forEach(h => allHourMap.set(h, 0));
+  parsed.forEach(d => allHourMap.set(d.hour, (allHourMap.get(d.hour) || 0) + 1));
 
-    if (h >= 6 && h < 14) return "6AM–2PM";
-    if (h >= 14 && h < 22) return "2PM–10PM";
-    return "10PM–6AM";
-  }
+  // Per-group hour maps
+  const groupHourMap = new Map();
+  topGroups.forEach(g => {
+    const hmap = new Map();
+    d3.range(24).forEach(h => hmap.set(h, 0));
+    parsed.filter(d => d.eventGroup === g).forEach(d => hmap.set(d.hour, (hmap.get(d.hour) || 0) + 1));
+    groupHourMap.set(g, hmap);
+  });
 
-  function shiftCounts(data) {
-    return d3.rollup(
-      data
-        .map(d => ({ ...d, shift: assignShift(d) }))
-        .filter(d => d.shift),
-      v => v.length,
-      d => d.shift
-    );
-  }
+  // Populate dropdown
+  const sel = d3.select("#calltype-select-2020");
+  topGroups.forEach(g => {
+    sel.append("option").attr("value", g).text(g);
+  });
 
-  const c2020 = shiftCounts(data2020);
-  const c2025 = shiftCounts(data2025);
+  const margin = { top: 20, right: 30, bottom: 60, left: 70 };
+  const width = 900 - margin.left - margin.right;
+  const height = 320 - margin.top - margin.bottom;
 
-  const shiftOrder = ["6AM–2PM", "2PM–10PM", "10PM–6AM"];
-
-  const shiftData = shiftOrder.map(shift => ({
-    shift: shift,
-    rate2020: ((c2020.get(shift) || 0) / pop2020) * 100000,
-    rate2025: ((c2025.get(shift) || 0) / pop2025) * 100000
-  }));
-
-  const margin = { top: 24, right: 40, bottom: 52, left: 80 };
-  const width = 740 - margin.left - margin.right;
-  const height = 380 - margin.top - margin.bottom;
-
-  const svg = d3.select("#standardized-shift-chart")
+  const svg = d3.select("#hour-calltype-chart-2020")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
@@ -605,168 +621,135 @@ function drawStandardizedShiftChart(data2020, data2025, populationData) {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x0 = d3.scaleBand()
-    .domain(shiftOrder)
-    .range([0, width])
-    .padding(0.28);
+  const hours = d3.range(24);
+  const x = d3.scaleLinear().domain([0, 23]).range([0, width]);
+  const y = d3.scaleLinear().range([height, 0]);
 
-  const x1 = d3.scaleBand()
-    .domain(["2020", "2025"])
-    .range([0, x0.bandwidth()])
-    .padding(0.1);
+  const yGrid = g.append("g").attr("class", "grid");
 
-  const y = d3.scaleLinear()
-    .domain([
-      0,
-      d3.max(shiftData, d => Math.max(d.rate2020, d.rate2025)) * 1.12
-    ])
-    .range([height, 0]);
+  const area = d3.area()
+    .x(d => x(d.hour))
+    .y0(height)
+    .y1(d => y(d.count))
+    .curve(d3.curveCatmullRom.alpha(0.5));
 
-  g.append("g")
-    .attr("class", "grid")
-    .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(""))
+  const line = d3.line()
+    .x(d => x(d.hour))
+    .y(d => y(d.count))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+
+  const areaPath = g.append("path")
+    .attr("fill", UW_GOLD)
+    .attr("fill-opacity", 0.18);
+
+  const linePath = g.append("path")
+    .attr("fill", "none")
+    .attr("stroke", UW_GOLD)
+    .attr("stroke-width", 2.5);
+
+  const dots = g.append("g");
+
+  // X axis
+  const xAxis = g.append("g")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${height})`)
+    .call(
+      d3.axisBottom(x)
+        .ticks(24)
+        .tickValues(d3.range(24))
+        .tickFormat(h => formatHour(h))
+    )
     .call(gg => gg.select(".domain").remove());
 
-  const groups = g.selectAll(".std-shift-group")
-    .data(shiftData)
-    .join("g")
-    .attr("transform", d => `translate(${x0(d.shift)},0)`);
+  xAxis.selectAll("text")
+    .style("font-size", "10px")
+    .attr("transform", "rotate(-45)")
+    .attr("text-anchor", "end")
+    .attr("dy", "0.35em");
 
-  groups.selectAll("rect")
-    .data(d => [
-      { year: "2020", rate: d.rate2020, shift: d.shift },
-      { year: "2025", rate: d.rate2025, shift: d.shift }
-    ])
-    .join("rect")
-    .attr("x", d => x1(d.year))
-    .attr("y", d => y(d.rate))
-    .attr("width", x1.bandwidth())
-    .attr("height", d => height - y(d.rate))
-    .attr("fill", d => d.year === "2020" ? UW_GOLD : UW_PURPLE)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.shift} — ${d.year}</strong><br>${d.rate.toFixed(1)} calls per 100,000 residents`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.shift} — ${d.year}</strong><br>${d.rate.toFixed(1)} calls per 100,000 residents`, event))
-    .on("mouseout", hideTip);
-
-  groups.selectAll(".std-shift-label")
-    .data(d => [
-      { year: "2020", rate: d.rate2020 },
-      { year: "2025", rate: d.rate2025 }
-    ])
-    .join("text")
+  g.append("text")
     .attr("class", "label")
-    .attr("x", d => x1(d.year) + x1.bandwidth() / 2)
-    .attr("y", d => y(d.rate) - 5)
+    .attr("x", width / 2)
+    .attr("y", height + 56)
     .attr("text-anchor", "middle")
-    .text(d => d.rate.toFixed(1));
+    .text("Hour of day (2020)");
 
-  g.append("g")
-    .attr("class", "axis")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x0).tickSize(0))
-    .call(gg => gg.select(".domain").remove());
+  const yAxisG = g.append("g").attr("class", "axis");
 
-  g.append("g")
-    .attr("class", "axis")
-    .call(d3.axisLeft(y).ticks(5).tickFormat(d => d.toFixed(0)))
-    .call(gg => gg.select(".domain").remove());
-}
+  g.append("text")
+    .attr("class", "label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -55)
+    .attr("text-anchor", "middle")
+    .text("Number of calls");
 
+  const peakLabel = g.append("text")
+    .attr("class", "label")
+    .attr("fill", "#85754d")
+    .attr("font-weight", "700")
+    .attr("font-size", "11px");
 
-// ========================================
-// CHART 5 — DUMBBELL BY PRECINCT
-// ========================================
+  function updateChart(groupKey) {
+    const hourMap = groupKey === "ALL" ? allHourMap : groupHourMap.get(groupKey);
+    const chartData = hours.map(h => ({ hour: h, count: hourMap.get(h) || 0 }));
 
-function drawPrecinctChart(data2020, data2025) {
-  // Count calls by precinct for each year
-  function precinctCounts(data) {
-    return d3.rollup(
-      data.filter(d => d["Dispatch Precinct"]?.trim()),
-      v => v.length,
-      d => d["Dispatch Precinct"].trim()
-    );
+    const total = d3.sum(chartData, d => d.count);
+    d3.select("#calltype-total-2020").text(`${d3.format(",")(total)} total calls in 2020`);
+
+    const maxY = d3.max(chartData, d => d.count);
+    y.domain([0, maxY * 1.18]);
+
+    yGrid.call(
+      d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat("")
+    ).call(gg => gg.select(".domain").remove())
+     .selectAll(".tick line").attr("stroke", "#f0eee9");
+
+    yAxisG.call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(","))).call(gg => gg.select(".domain").remove());
+
+    areaPath.datum(chartData).transition().duration(400).attr("d", area);
+    linePath.datum(chartData).transition().duration(400).attr("d", line);
+
+    const peak = chartData.reduce((a, b) => b.count > a.count ? b : a);
+    peakLabel
+      .attr("x", x(peak.hour))
+      .attr("y", y(peak.count) - 10)
+      .attr("text-anchor", peak.hour > 18 ? "end" : "middle")
+      .text(`Peak: ${formatHour(peak.hour)} (${d3.format(",")(peak.count)})`);
+
+    const dotSel = dots.selectAll("circle").data(chartData);
+    dotSel.enter().append("circle")
+      .attr("r", 4)
+      .attr("fill", UW_GOLD)
+      .attr("stroke", "white")
+      .attr("stroke-width", 1.5)
+      .style("cursor", "pointer")
+      .on("mouseover", (event, d) =>
+        showTip(
+          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
+          event
+        ))
+      .on("mousemove", (event, d) =>
+        showTip(
+          `<strong>${groupKey === "ALL" ? "All calls" : groupKey}</strong><br>` +
+          `${formatHour(d.hour)}: ${d3.format(",")(d.count)} calls`,
+          event
+        ))
+      .on("mouseout", hideTip)
+      .merge(dotSel)
+      .transition().duration(400)
+      .attr("cx", d => x(d.hour))
+      .attr("cy", d => y(d.count));
+
+    dotSel.exit().remove();
   }
 
-  const c2020 = precinctCounts(data2020);
-  const c2025 = precinctCounts(data2025);
+  updateChart("ALL");
 
-  const allPrecincts = Array.from(new Set([...c2020.keys(), ...c2025.keys()]));
-  const precinctData = allPrecincts
-    .map(p => ({ precinct: p, count2020: c2020.get(p) || 0, count2025: c2025.get(p) || 0 }))
-    .sort((a, b) => b.count2025 - a.count2025);
-
-  const margin = { top: 12, right: 90, bottom: 44, left: 140 };
-  const width = 700 - margin.left - margin.right;
-  const height = 340 - margin.top - margin.bottom;
-
-  const svg = d3.select("#precinct-chart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);
-
-  const g = svg.append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-  const maxVal = d3.max(precinctData, d => Math.max(d.count2020, d.count2025));
-  const x = d3.scaleLinear().domain([0, maxVal * 1.1]).range([0, width]);
-  const y = d3.scaleBand()
-    .domain(precinctData.map(d => d.precinct))
-    .range([0, height]).padding(0.35);
-
-  // Grid
-  g.append("g").attr("class", "grid")
-    .call(d3.axisBottom(x).ticks(5).tickSize(height).tickFormat(""))
-    .call(gg => gg.select(".domain").remove());
-
-  // Connector lines
-  g.selectAll(".p-connector")
-    .data(precinctData)
-    .join("line")
-    .attr("x1", d => x(d.count2020))
-    .attr("x2", d => x(d.count2025))
-    .attr("y1", d => y(d.precinct) + y.bandwidth() / 2)
-    .attr("y2", d => y(d.precinct) + y.bandwidth() / 2)
-    .attr("stroke", "#ccc").attr("stroke-width", 2);
-
-  // 2020 dots (gold)
-  g.selectAll(".p-dot-2020")
-    .data(precinctData)
-    .join("circle")
-    .attr("cx", d => x(d.count2020))
-    .attr("cy", d => y(d.precinct) + y.bandwidth() / 2)
-    .attr("r", 8).attr("fill", UW_GOLD)
-    .attr("stroke", "white").attr("stroke-width", 1.5)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.precinct} — 2020</strong><br>${d3.format(",")(d.count2020)} calls`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.precinct} — 2020</strong><br>${d3.format(",")(d.count2020)} calls`, event))
-    .on("mouseout", hideTip);
-
-  // 2025 dots (purple)
-  g.selectAll(".p-dot-2025")
-    .data(precinctData)
-    .join("circle")
-    .attr("cx", d => x(d.count2025))
-    .attr("cy", d => y(d.precinct) + y.bandwidth() / 2)
-    .attr("r", 8).attr("fill", UW_PURPLE)
-    .attr("stroke", "white").attr("stroke-width", 1.5)
-    .on("mouseover", (event, d) =>
-      showTip(`<strong>${d.precinct} — 2025</strong><br>${d3.format(",")(d.count2025)} calls`, event))
-    .on("mousemove", (event, d) =>
-      showTip(`<strong>${d.precinct} — 2025</strong><br>${d3.format(",")(d.count2025)} calls`, event))
-    .on("mouseout", hideTip);
-
-  // Axes
-  g.append("g").attr("class", "axis")
-    .call(d3.axisLeft(y).tickSize(0))
-    .call(gg => gg.select(".domain").remove())
-    .selectAll("text").attr("dx", "-8").style("font-size", "13px");
-
-  g.append("g").attr("class", "axis")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format(",")))
-    .call(gg => gg.select(".domain").remove());
+  sel.on("change", function() {
+    updateChart(this.value);
+  });
 }
 
 // ========================================

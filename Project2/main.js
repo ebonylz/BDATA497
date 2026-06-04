@@ -570,11 +570,6 @@ function drawHourByCallTypeChart(data2025) {
 }
 
 
-// ========================================
-// CHART — HOUR BY CALL TYPE (2020 version)
-// Same chart as above but uses 2020 data and gold color
-// ========================================
-
 function drawHourByCallTypeChart2020(data2020) {
   const parseTime = d3.timeParse("%Y %b %d %I:%M:%S %p");
 
